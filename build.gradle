@@ -35,11 +35,10 @@ javafx {
 }
 
 dependencies {
-
+    implementation 'com.jfoenix:jfoenix:9.0.10'
     testImplementation("org.junit.jupiter:junit-jupiter-api:${junitVersion}")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${junitVersion}")
 }
-
 test {
     useJUnitPlatform()
 }
