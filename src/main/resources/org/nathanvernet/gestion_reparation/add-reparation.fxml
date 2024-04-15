@@ -69,7 +69,7 @@
       </HBox>
       <ButtonBar prefHeight="70.0" prefWidth="652.0">
         <buttons>
-          <Button mnemonicParsing="false" text="Fermer" />
+          <Button fx:id="exitButton" mnemonicParsing="false" text="Fermer" />
         </buttons>
       </ButtonBar>
    </children>

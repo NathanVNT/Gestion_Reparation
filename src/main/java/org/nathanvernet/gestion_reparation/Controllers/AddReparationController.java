@@ -1,7 +1,9 @@
 package org.nathanvernet.gestion_reparation.Controllers;
 
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
+import javafx.stage.Stage;
 import org.nathanvernet.gestion_reparation.BDD.GestionBDD;
 
 import java.net.URL;
@@ -12,6 +14,7 @@ import java.util.ResourceBundle;
 public class AddReparationController implements Initializable {
     public ChoiceBox choiceBoxReparateur;
     public GestionBDD gestionBDD = new GestionBDD();
+    public Button exitButton;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -20,7 +23,17 @@ public class AddReparationController implements Initializable {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+        exitButton.setOnAction(event -> stageClose());
     }
+
+    /**
+     * Méthode qui permet la fermeture du stage
+     */
+    private void stageClose() {
+        Stage stage = (Stage) exitButton.getScene().getWindow();
+        stage.close();
+    }
+
     /**
     * @param choix
      * Méthode qui rempli une choiceBox (ici la choicebox réparateur)
