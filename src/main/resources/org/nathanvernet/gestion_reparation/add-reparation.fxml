@@ -54,7 +54,7 @@
             <ChoiceBox fx:id="choiceBoxReparateur" prefHeight="26.0" prefWidth="112.0" />
             <Separator orientation="VERTICAL" prefHeight="90.0" prefWidth="30.0" visible="false" />
             <Label prefHeight="26.0" prefWidth="87.0" text="État réparation:" />
-            <ChoiceBox prefHeight="26.0" prefWidth="112.0" />
+            <ChoiceBox fx:id="choiceBoxEtat" prefHeight="26.0" prefWidth="112.0" />
          </children>
          <padding>
             <Insets top="10.0" />

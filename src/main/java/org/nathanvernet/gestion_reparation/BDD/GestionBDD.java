@@ -9,7 +9,7 @@ public class GestionBDD {
     private Statement statement;
     private ResultSet resultSet;
     public void ConnexionBDD() throws SQLException {
-        connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/GestionReparation", "root", "root");
+        connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/GestionReparation", "root", "root"); //TODO Ajout de la config via le config.json
         statement = connection.createStatement();
     }
     public ArrayList RecupReparateur() throws SQLException {

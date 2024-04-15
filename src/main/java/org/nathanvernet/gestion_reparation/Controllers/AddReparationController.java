@@ -15,11 +15,17 @@ public class AddReparationController implements Initializable {
     public ChoiceBox choiceBoxReparateur;
     public GestionBDD gestionBDD = new GestionBDD();
     public Button exitButton;
+    public ChoiceBox choiceBoxEtat;
+    private ArrayList etat = new ArrayList();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        etat.add("Non traité");
+        etat.add("En cours");
+        etat.add("Traité");
+        remplirChoiceBoxEtat(etat);
         try {
-            remplirChoiceBox(recupReparateur());
+            remplirChoiceBoxReparateur(recupReparateur());
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -36,11 +42,19 @@ public class AddReparationController implements Initializable {
 
     /**
     * @param choix
-     * Méthode qui rempli une choiceBox (ici la choicebox réparateur)
+     * Méthode qui rempli une choiceBox (ici la choicebox état de réparation)
     * */
-    private void remplirChoiceBox(ArrayList choix){
+    private void remplirChoiceBoxReparateur(ArrayList choix){
         choiceBoxReparateur.getItems().clear();
         choiceBoxReparateur.getItems().addAll(choix);
+    }
+    /**
+     * @param choix
+     * Méthode qui rempli une choiceBox (ici la choicebox réparateur)
+     * */
+    private void remplirChoiceBoxEtat(ArrayList choix){
+        choiceBoxEtat.getItems().clear();
+        choiceBoxEtat.getItems().addAll(choix);
     }
 
     /**
