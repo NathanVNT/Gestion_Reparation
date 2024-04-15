@@ -14,13 +14,13 @@ repositories {
 }
 
 ext {
-    junitVersion = '5.10.0'
+    junitVersion = '5.10.2'
 }
 
 sourceCompatibility = '17'
 targetCompatibility = '17'
 
-tasks.withType(JavaCompile) {
+tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8'
 }
 
@@ -35,7 +35,7 @@ javafx {
 }
 
 dependencies {
-    implementation 'com.jfoenix:jfoenix:9.0.10'
+    implementation 'mysql:mysql-connector-java:8.0.33'
     testImplementation("org.junit.jupiter:junit-jupiter-api:${junitVersion}")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${junitVersion}")
 }

@@ -1,4 +1,4 @@
-package org.nathanvernet.gestion_reparation;
+package org.nathanvernet.gestion_reparation.Controllers;
 
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -7,6 +7,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import org.nathanvernet.gestion_reparation.Application;
 
 import java.io.IOException;
 import java.net.URL;
