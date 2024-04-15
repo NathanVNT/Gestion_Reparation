@@ -5,11 +5,13 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.stage.Stage;
 import org.nathanvernet.gestion_reparation.BDD.GestionBDD;
+import org.nathanvernet.gestion_reparation.QRCodeGenerator;
 
+import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.ResourceBundle;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 public class AddReparationController implements Initializable {
     public ChoiceBox choiceBoxReparateur;
@@ -17,6 +19,7 @@ public class AddReparationController implements Initializable {
     public Button exitButton;
     public ChoiceBox choiceBoxEtat;
     private ArrayList etat = new ArrayList();
+    private QRCodeGenerator qrCodeGenerator = new QRCodeGenerator();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -29,7 +32,16 @@ public class AddReparationController implements Initializable {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        exitButton.setOnAction(event -> stageClose());
+        exitButton.setOnAction(event -> {
+            try {
+
+                qrCodeGenerator.saveQRCode(generateReference(), "/Users/nathan/DEV/qr.png");
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            stageClose();
+
+        });
     }
 
     /**
@@ -65,4 +77,21 @@ public class AddReparationController implements Initializable {
     private ArrayList recupReparateur() throws SQLException {
         return gestionBDD.RecupReparateur();
     }
-}
+
+    //TEST
+        public String generateReference() {
+            // Générer une chaîne aléatoire de 6 caractères
+            String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            StringBuilder reference = new StringBuilder();
+            Random random = new Random();
+            for (int i = 0; i < 6; i++) {
+                reference.append(chars.charAt(random.nextInt(chars.length())));
+            }
+
+            // Ajouter la date et l'heure actuelles à la référence
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
+            reference.append(dateFormat.format(new Date()));
+
+            return reference.toString();        }
+    }
+

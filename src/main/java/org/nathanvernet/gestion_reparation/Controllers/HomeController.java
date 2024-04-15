@@ -7,6 +7,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import javafx.scene.Parent;
 import org.nathanvernet.gestion_reparation.Application;
 
 import java.io.IOException;
@@ -22,6 +23,8 @@ public class HomeController implements Initializable {
     public TextField textFieldRechercheReparation;
     public Button rechercheReparation;
     public Button boutonActualiser;
+    public Button pageListeClients;
+    private Scene currentScene;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -40,6 +43,15 @@ public class HomeController implements Initializable {
                 throw new RuntimeException(e);
             }
         });
+        pageListeClients.setOnAction(event -> {
+            try {
+                currentScene = nouvelleReparation.getScene();
+                loadListeClients();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
+
     }
     private void openNouvelleReparation() throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(Application.class.getResource("add-reparation.fxml"));
@@ -48,5 +60,10 @@ public class HomeController implements Initializable {
         stage.setScene(scene);
         stage.setTitle("Nouvelle Reparation");
         stage.show();
+    }
+    private void loadListeClients() throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(Application.class.getResource("clients-page.fxml"));
+        Parent root = fxmlLoader.load();
+        currentScene.setRoot(root);
     }
 }

@@ -34,7 +34,7 @@
       <VBox alignment="CENTER" prefHeight="607.0" prefWidth="286.0" spacing="30.0" BorderPane.alignment="CENTER">
          <children>
             <Button mnemonicParsing="false" text="Liste des Réparations" />
-            <Button mnemonicParsing="false" text="Liste des clients" />
+            <Button fx:id="pageListeClients" mnemonicParsing="false" text="Liste des clients" />
          </children>
       </VBox>
    </left>

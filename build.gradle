@@ -38,6 +38,9 @@ dependencies {
     implementation 'mysql:mysql-connector-java:8.0.33'
     testImplementation("org.junit.jupiter:junit-jupiter-api:${junitVersion}")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${junitVersion}")
+    implementation 'com.google.zxing:core:3.4.1'
+    implementation 'net.glxn:qrgen:1.4'
+
 }
 test {
     useJUnitPlatform()
