@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="672.0" spacing="25.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.nathanvernet.gestion_reparation.Controllers.AddReparationController">
+<VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="676.0" prefWidth="817.0" spacing="25.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.nathanvernet.gestion_reparation.Controllers.AddReparationController">
    <children>
       <Label text="Fiche réparation">
          <font>
@@ -30,6 +30,38 @@
                   <TextField fx:id="refReparation" disable="true" prefHeight="26.0" prefWidth="186.0" />
                </children>
             </HBox>
+            <HBox prefHeight="100.0" prefWidth="200.0" spacing="10.0">
+               <children>
+                  <Label prefHeight="26.0" prefWidth="49.0" text="Nom:" />
+                  <TextField fx:id="clientNom" disable="true" />
+                  <Separator orientation="VERTICAL" prefHeight="26.0" prefWidth="118.0" visible="false" />
+                  <HBox prefHeight="100.0" prefWidth="200.0" spacing="10.0">
+                     <children>
+                        <Label prefHeight="26.0" prefWidth="81.0" text="Prénom:" />
+                        <TextField fx:id="clientPrenom" disable="true" />
+                     </children>
+                  </HBox>
+               </children>
+            </HBox>
+            <HBox prefHeight="100.0" prefWidth="200.0" spacing="10.0">
+               <children>
+                  <Label prefHeight="26.0" prefWidth="50.0" text="Tel:" />
+                  <TextField fx:id="clientTel" disable="true" />
+                  <Separator orientation="VERTICAL" prefHeight="26.0" prefWidth="118.0" visible="false" />
+                  <HBox prefHeight="26.0" prefWidth="440.0" spacing="10.0">
+                     <children>
+                        <Label prefHeight="26.0" prefWidth="49.0" text="E-mail:" />
+                        <TextField fx:id="clientMail" disable="true" prefHeight="26.0" prefWidth="206.0" />
+                     </children>
+                  </HBox>
+               </children>
+            </HBox>
+            <HBox prefHeight="100.0" prefWidth="200.0" spacing="10.0">
+               <children>
+                  <Label prefHeight="26.0" prefWidth="50.0" text="Société:" />
+                  <TextField fx:id="clientSociete" disable="true" />
+               </children>
+            </HBox>
             <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
                <children>
                   <VBox prefHeight="200.0" prefWidth="100.0" spacing="5.0">
@@ -44,6 +76,12 @@
                         <TextArea maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="157.0" prefWidth="293.0" />
                      </children>
                   </VBox>
+               </children>
+            </HBox>
+            <HBox prefHeight="100.0" prefWidth="200.0" spacing="10.0">
+               <children>
+                  <Label prefHeight="26.0" prefWidth="50.0" text="Prénom:" />
+                  <TextField fx:id="clientName11" />
                </children>
             </HBox>
          </children>
@@ -69,6 +107,7 @@
       </HBox>
       <ButtonBar prefHeight="70.0" prefWidth="652.0">
         <buttons>
+            <Button fx:id="printButton" mnemonicParsing="false" text="Imprimer le ticket" />
           <Button fx:id="exitButton" mnemonicParsing="false" text="Fermer" />
         </buttons>
       </ButtonBar>
