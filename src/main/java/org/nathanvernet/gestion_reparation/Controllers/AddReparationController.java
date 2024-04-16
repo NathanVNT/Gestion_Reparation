@@ -3,6 +3,7 @@ package org.nathanvernet.gestion_reparation.Controllers;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import org.nathanvernet.gestion_reparation.BDD.GestionBDD;
 import org.nathanvernet.gestion_reparation.QRCodeGenerator;
@@ -18,11 +19,13 @@ public class AddReparationController implements Initializable {
     public GestionBDD gestionBDD = new GestionBDD();
     public Button exitButton;
     public ChoiceBox choiceBoxEtat;
+    public TextField refReparation;
     private ArrayList etat = new ArrayList();
     private QRCodeGenerator qrCodeGenerator = new QRCodeGenerator();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        refReparation.setText(generateReference());
         etat.add("Non traité");
         etat.add("En cours");
         etat.add("Traité");
@@ -77,9 +80,7 @@ public class AddReparationController implements Initializable {
     private ArrayList recupReparateur() throws SQLException {
         return gestionBDD.RecupReparateur();
     }
-
-    //TEST
-        public String generateReference() {
+     public String generateReference() {
             // Générer une chaîne aléatoire de 6 caractères
             String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
             StringBuilder reference = new StringBuilder();
@@ -92,6 +93,7 @@ public class AddReparationController implements Initializable {
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
             reference.append(dateFormat.format(new Date()));
 
-            return reference.toString();        }
+            return reference.toString();
     }
+}
 
