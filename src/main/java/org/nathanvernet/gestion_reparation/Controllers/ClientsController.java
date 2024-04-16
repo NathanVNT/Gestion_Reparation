@@ -5,6 +5,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.stage.Stage;
 import org.nathanvernet.gestion_reparation.Application;
 
 import java.io.IOException;
@@ -26,7 +27,14 @@ public class ClientsController implements Initializable {
             }
         });
     }
-
+    private void openNouveauClient() throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(Application.class.getResource("add-client.fxml"));
+        Scene scene = new Scene(fxmlLoader.load());
+        Stage stage = new Stage();
+        stage.setScene(scene);
+        stage.setTitle("Nouveau Client");
+        stage.show();
+    }
     private void loadListeReparations() throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(Application.class.getResource("home-page.fxml"));
         Parent root = fxmlLoader.load();

@@ -2,6 +2,8 @@ package org.nathanvernet.gestion_reparation;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.stage.Popup;
 import javafx.stage.Stage;
 import org.nathanvernet.gestion_reparation.BDD.GestionBDD;
 
@@ -20,7 +22,13 @@ public class Application extends javafx.application.Application {
         try {
             gestionBDD.ConnexionBDD();
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Erreur de connexion");
+            alert.setHeaderText("Erreur de connexion");
+            alert.setContentText("Erreur de connexion à la base de données veuillez vérifier la configuration.");
+            alert.showAndWait();
+            stage.close();
+
         }
     }
 
