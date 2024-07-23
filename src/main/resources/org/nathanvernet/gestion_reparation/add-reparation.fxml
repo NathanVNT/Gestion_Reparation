@@ -24,7 +24,7 @@
             <HBox prefHeight="100.0" prefWidth="200.0" spacing="10.0">
                <children>
                   <Label prefHeight="39.0" prefWidth="122.0" text="Sélectionnez un client:" />
-                  <Button mnemonicParsing="false" text="Liste des clients" />
+                  <Button fx:id="selectClient" mnemonicParsing="false" text="Liste des clients" />
                   <Separator orientation="VERTICAL" prefHeight="26.0" prefWidth="101.0" visible="false" />
                   <Label prefHeight="30.0" prefWidth="97.0" text="Ref. Réparation:" />
                   <TextField fx:id="refReparation" disable="true" prefHeight="26.0" prefWidth="186.0" />

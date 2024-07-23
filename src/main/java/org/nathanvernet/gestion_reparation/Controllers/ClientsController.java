@@ -7,6 +7,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
 import org.nathanvernet.gestion_reparation.Application;
+import org.nathanvernet.gestion_reparation.BDD.GestionBDD;
 
 import java.io.IOException;
 import java.net.URL;
@@ -15,7 +16,9 @@ import java.util.ResourceBundle;
 public class ClientsController implements Initializable {
     private Scene currentScene;
     public Button listeReparationsPage;
+    public ClientsController(GestionBDD gestionBDD) {
 
+    }
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         listeReparationsPage.setOnAction(event -> {

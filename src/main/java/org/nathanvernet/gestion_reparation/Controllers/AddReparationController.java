@@ -1,10 +1,13 @@
 package org.nathanvernet.gestion_reparation.Controllers;
 
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import org.nathanvernet.gestion_reparation.Application;
 import org.nathanvernet.gestion_reparation.BDD.GestionBDD;
 import org.nathanvernet.gestion_reparation.QRCodeGenerator;
 
@@ -19,10 +22,10 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class AddReparationController implements Initializable {
-    public ChoiceBox choiceBoxReparateur;
+    public ChoiceBox<String> choiceBoxReparateur;
     public GestionBDD gestionBDD = new GestionBDD();
     public Button exitButton;
-    public ChoiceBox choiceBoxEtat;
+    public ChoiceBox<String> choiceBoxEtat;
     public TextField refReparation;
     public Button printButton;
     public TextField clientNom;
@@ -35,7 +38,8 @@ public class AddReparationController implements Initializable {
     private static String telClient;
     private static String emailClient;
     private static String societeClient;
-    private ArrayList etat = new ArrayList();
+    public Button selectClient;
+    private ArrayList<String> etat = new ArrayList<>();
     private String getReference;
     private QRCodeGenerator qrCodeGenerator = new QRCodeGenerator();
 
@@ -44,11 +48,10 @@ public class AddReparationController implements Initializable {
         getReference = generateReference();
         refReparation.setText(getReference);
         try {
-            qrCodeGenerator.saveQRCode(getReference, "/Users/nathan/DEV/"+ getReference+".png");
+            qrCodeGenerator.saveQRCode(getReference, "/Users/nathan/DEV/" + getReference + ".png");
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        setClient("Michel", "truc", "0606060606", "example@example.com", "");
         setClientTextField();
         etat.add("Non traité");
         etat.add("En cours");
@@ -59,106 +62,102 @@ public class AddReparationController implements Initializable {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        exitButton.setOnAction(event -> {
-            stageClose();
-        });
+        exitButton.setOnAction(event -> stageClose());
         printButton.setOnAction(event -> print());
+        selectClient.setOnAction(event -> {
+            try {
+                openSelectClient();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
     }
 
-    /**
-     * Méthode qui permet la fermeture du stage
-     */
+    private void openSelectClient() throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(Application.class.getResource("select-client.fxml"));
+        Scene scene = new Scene(fxmlLoader.load());
+        Stage stage = new Stage();
+        SelectClientController controller = fxmlLoader.getController();
+        controller.setAddReparationController(this);
+        stage.setScene(scene);
+        stage.setTitle("Sélection de client");
+        stage.show();
+    }
+
     private void stageClose() {
         Stage stage = (Stage) exitButton.getScene().getWindow();
         stage.close();
     }
 
-    /**
-    * @param choix
-     * Méthode qui rempli une choiceBox (ici la choicebox état de réparation)
-    * */
-    private void remplirChoiceBoxReparateur(ArrayList choix){
+    private void remplirChoiceBoxReparateur(ArrayList<String> choix) {
         choiceBoxReparateur.getItems().clear();
         choiceBoxReparateur.getItems().addAll(choix);
     }
-    /**
-     * @param choix
-     * Méthode qui rempli une choiceBox (ici la choicebox réparateur)
-     * */
-    private void remplirChoiceBoxEtat(ArrayList choix){
+
+    private void remplirChoiceBoxEtat(ArrayList<String> choix) {
         choiceBoxEtat.getItems().clear();
         choiceBoxEtat.getItems().addAll(choix);
     }
 
-    /**
-     * Méthode qui permet de récuperer les réparateurs depuis la classe gestion bdd qui fait le lien entre le code et la base de données.
-     * @return ArrayList
-     * @throws SQLException
-     */
-    private ArrayList recupReparateur() throws SQLException {
+    private ArrayList<String> recupReparateur() throws SQLException {
         return gestionBDD.RecupReparateur();
     }
-     public String generateReference() {
-            // Générer une chaîne aléatoire de 6 caractères
-            String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-            StringBuilder reference = new StringBuilder();
-            Random random = new Random();
-            for (int i = 0; i < 6; i++) {
-                reference.append(chars.charAt(random.nextInt(chars.length())));
-            }
 
-            // Ajouter la date et l'heure actuelles à la référence
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
-            reference.append(dateFormat.format(new Date()));
+    public String generateReference() {
+        String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        StringBuilder reference = new StringBuilder();
+        Random random = new Random();
+        for (int i = 0; i < 6; i++) {
+            reference.append(chars.charAt(random.nextInt(chars.length())));
+        }
 
-            return reference.toString();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
+        reference.append(dateFormat.format(new Date()));
+
+        return reference.toString();
     }
-    //TODO Ne fonctionne pas, à revoir
-    private void print(){
-        // Créer une instance de PrinterJob
+
+    private void print() {
         PrinterJob job = PrinterJob.getPrinterJob();
 
-        // Définir le contenu à imprimer
         job.setPrintable((graphics, pageFormat, pageIndex) -> {
             if (pageIndex > 0) {
                 return Printable.NO_SUCH_PAGE;
             }
 
-            // Définir la police pour le texte
             graphics.setFont(new Font("Arial", Font.PLAIN, 12));
 
-            // Dessiner le texte
             graphics.drawString("Exemple de texte à imprimer", 100, 100);
-            graphics.drawString("Client: " + nomClient + " " + prenomClient , 100, 120);
+            graphics.drawString("Client: " + nomClient + " " + prenomClient, 100, 120);
             graphics.drawString("Société: " + societeClient, 100, 140);
             graphics.drawString("Tel: " + telClient, 100, 160);
             graphics.drawString("E-Mail: " + emailClient, 100, 180);
 
-            // Charger et dessiner une image
-            Image image = Toolkit.getDefaultToolkit().getImage("/Users/nathan/DEV/" + getReference +".png");
+            Image image = Toolkit.getDefaultToolkit().getImage("/Users/nathan/DEV/" + getReference + ".png");
             graphics.drawImage(image, 100, 200, 200, 200, null);
 
-            // Renvoyer que la page a été imprimée
             return Printable.PAGE_EXISTS;
         });
 
-        // Afficher la boîte de dialogue d'impression et imprimer si l'utilisateur le confirme
         if (job.printDialog()) {
             try {
                 job.print();
             } catch (PrinterException e) {
-                System.err.println("Erreur lors de l'impression : " + e);
+                e.printStackTrace();
             }
         }
     }
-    public static void setClient(String nom, String prenom, String tel, String email, String societe){
-        nomClient = nom;
-        prenomClient = prenom;
-        telClient = tel;
-        emailClient = email;
-        societeClient = societe;
+
+    public void setClient(String nom, String prenom, String tel, String email, String societe) {
+        this.nomClient = nom;
+        this.prenomClient = prenom;
+        this.telClient = tel;
+        this.emailClient = email;
+        this.societeClient = societe;
+        setClientTextField();
     }
-    private void setClientTextField(){
+
+    private void setClientTextField() {
         clientNom.setText(nomClient);
         clientPrenom.setText(prenomClient);
         clientTel.setText(telClient);
@@ -166,4 +165,3 @@ public class AddReparationController implements Initializable {
         clientSociete.setText(societeClient);
     }
 }
-

@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 
 public class Application extends javafx.application.Application {
+    public static GestionBDD gestionBDD = new GestionBDD();
     @Override
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(Application.class.getResource("home-page.fxml"));
@@ -18,20 +19,21 @@ public class Application extends javafx.application.Application {
         stage.setTitle("Gestion Réparation by Nathan VERNET");
         stage.setScene(scene);
         stage.show();
-        GestionBDD gestionBDD = new GestionBDD();
+        getBDD();
+
+    }
+    private void getBDD() {
         try {
             gestionBDD.ConnexionBDD();
         } catch (SQLException e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Erreur de connexion");
             alert.setHeaderText("Erreur de connexion");
-            alert.setContentText("Erreur de connexion à la base de données veuillez vérifier la configuration.");
+            alert.setContentText("Erreur de connexion à la base de données veuillez vérifier la configuration de l'application.");
             alert.showAndWait();
-            stage.close();
-
+            System.exit(0);
         }
     }
-
     public static void main(String[] args) {
         launch();
     }
