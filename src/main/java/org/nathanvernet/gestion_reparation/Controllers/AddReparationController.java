@@ -1,44 +1,69 @@
 package org.nathanvernet.gestion_reparation.Controllers;
 
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 import org.nathanvernet.gestion_reparation.Application;
 import org.nathanvernet.gestion_reparation.BDD.GestionBDD;
 import org.nathanvernet.gestion_reparation.QRCodeGenerator;
 
-import java.awt.*;
 import java.awt.print.Printable;
 import java.awt.print.PrinterException;
 import java.awt.print.PrinterJob;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.net.URL;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Optional;
+import java.util.Random;
+import java.util.ResourceBundle;
 
 public class AddReparationController implements Initializable {
-    public ChoiceBox<String> choiceBoxReparateur;
-    public GestionBDD gestionBDD = new GestionBDD();
-    public Button exitButton;
-    public ChoiceBox<String> choiceBoxEtat;
-    public TextField refReparation;
-    public Button printButton;
-    public TextField clientNom;
-    public TextField clientPrenom;
-    public TextField clientTel;
-    public TextField clientMail;
-    public TextField clientSociete;
+    @FXML
+    private ChoiceBox<String> choiceBoxReparateur;
+    @FXML
+    private GestionBDD gestionBDD = new GestionBDD();
+    @FXML
+    private Button exitButton;
+    @FXML
+    private ChoiceBox<String> choiceBoxEtat;
+    @FXML
+    private TextField refReparation;
+    @FXML
+    private Button printButton;
+    @FXML
+    private TextField clientNom;
+    @FXML
+    private TextField clientPrenom;
+    @FXML
+    private TextField clientTel;
+    @FXML
+    private TextField clientMail;
+    @FXML
+    private TextField clientSociete;
+    @FXML
+    private TextArea detailsPanne;
+    @FXML
+    private TextArea reparationEffectuee;
+    @FXML
+    private TextField tarif;
+
     private static String nomClient;
     private static String prenomClient;
     private static String telClient;
     private static String emailClient;
     private static String societeClient;
-    public Button selectClient;
+    private static int idClient;
+    @FXML
+    private Button selectClient;
     private ArrayList<String> etat = new ArrayList<>();
     private String getReference;
     private QRCodeGenerator qrCodeGenerator = new QRCodeGenerator();
@@ -57,12 +82,13 @@ public class AddReparationController implements Initializable {
         etat.add("En cours");
         etat.add("Traité");
         remplirChoiceBoxEtat(etat);
+        choiceBoxEtat.setValue("Non traité"); // Set default value to "Non traité"
         try {
             remplirChoiceBoxReparateur(recupReparateur());
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        exitButton.setOnAction(event -> stageClose());
+        exitButton.setOnAction(event -> handleExit());
         printButton.setOnAction(event -> print());
         selectClient.setOnAction(event -> {
             try {
@@ -82,6 +108,79 @@ public class AddReparationController implements Initializable {
         stage.setScene(scene);
         stage.setTitle("Sélection de client");
         stage.show();
+    }
+
+    private void handleExit() {
+        try {
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Enregistrer");
+            alert.setHeaderText("Voulez-vous enregistrer les modifications avant de quitter ?");
+            alert.setContentText("Choisissez une option.");
+
+            ButtonType buttonTypeEnregistrer = new ButtonType("Enregistrer");
+            ButtonType buttonTypeAnnuler = new ButtonType("Annuler", ButtonBar.ButtonData.CANCEL_CLOSE);
+            ButtonType buttonTypeNePasEnregistrer = new ButtonType("Ne pas enregistrer");
+
+            alert.getButtonTypes().setAll(buttonTypeEnregistrer, buttonTypeNePasEnregistrer, buttonTypeAnnuler);
+
+            Optional<ButtonType> result = alert.showAndWait();
+            if (result.isPresent()) {
+                if (result.get() == buttonTypeEnregistrer) {
+                    saveDataToDatabase();
+                    stageClose();
+                } else if (result.get() == buttonTypeNePasEnregistrer) {
+                    stageClose();
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void saveDataToDatabase() {
+        try {
+            String query = "INSERT INTO reparation (numero_reparation, id_client, details, reparation_effectuee, etat, id_reparateur, tarif, date) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+            PreparedStatement preparedStatement = gestionBDD.getConnection().prepareStatement(query);
+            preparedStatement.setString(1, getReference);
+            preparedStatement.setInt(2, getClientId());
+            preparedStatement.setString(3, detailsPanne.getText());
+            preparedStatement.setString(4, reparationEffectuee.getText());
+            preparedStatement.setString(5, choiceBoxEtat.getValue());
+            preparedStatement.setInt(6, getReparateurId());
+
+            // Handle optional tarif
+            if (tarif.getText().isEmpty()) {
+                preparedStatement.setNull(7, java.sql.Types.DECIMAL);
+            } else {
+                preparedStatement.setBigDecimal(7, new BigDecimal(tarif.getText()));
+            }
+
+            preparedStatement.setDate(8, new java.sql.Date(System.currentTimeMillis()));
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private int getClientId() {
+        return idClient;
+    }
+
+    private int getReparateurId() {
+        String selectedReparateur = choiceBoxReparateur.getValue();
+        int reparateurId = 0;
+        try {
+            String query = "SELECT id FROM reparateur WHERE prenom = ?";
+            PreparedStatement preparedStatement = gestionBDD.getConnection().prepareStatement(query);
+            preparedStatement.setString(1, selectedReparateur);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                reparateurId = resultSet.getInt("id");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return reparateurId;
     }
 
     private void stageClose() {
@@ -125,7 +224,7 @@ public class AddReparationController implements Initializable {
                 return Printable.NO_SUCH_PAGE;
             }
 
-            graphics.setFont(new Font("Arial", Font.PLAIN, 12));
+            graphics.setFont(new java.awt.Font("Arial", java.awt.Font.PLAIN, 12));
 
             graphics.drawString("Exemple de texte à imprimer", 100, 100);
             graphics.drawString("Client: " + nomClient + " " + prenomClient, 100, 120);
@@ -133,7 +232,7 @@ public class AddReparationController implements Initializable {
             graphics.drawString("Tel: " + telClient, 100, 160);
             graphics.drawString("E-Mail: " + emailClient, 100, 180);
 
-            Image image = Toolkit.getDefaultToolkit().getImage("/Users/nathan/DEV/" + getReference + ".png");
+            java.awt.Image image = java.awt.Toolkit.getDefaultToolkit().getImage("/Users/nathan/DEV/" + getReference + ".png");
             graphics.drawImage(image, 100, 200, 200, 200, null);
 
             return Printable.PAGE_EXISTS;
@@ -148,12 +247,13 @@ public class AddReparationController implements Initializable {
         }
     }
 
-    public void setClient(String nom, String prenom, String tel, String email, String societe) {
-        this.nomClient = nom;
-        this.prenomClient = prenom;
-        this.telClient = tel;
-        this.emailClient = email;
-        this.societeClient = societe;
+    public void setClient(String nom, String prenom, String tel, String email, String societe, int id) {
+        nomClient = nom;
+        prenomClient = prenom;
+        telClient = tel;
+        emailClient = email;
+        societeClient = societe;
+        idClient = id;
         setClientTextField();
     }
 

@@ -67,21 +67,22 @@
                   <VBox prefHeight="200.0" prefWidth="100.0" spacing="5.0">
                      <children>
                         <Label text="Détails de la panne" />
-                        <TextArea maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="157.0" prefWidth="293.0" />
+                        <TextArea fx:id="detailsPanne" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="157.0" prefWidth="293.0" />
                      </children>
                   </VBox>
                   <VBox prefHeight="200.0" prefWidth="100.0" spacing="5.0">
                      <children>
                         <Label text="Réparation effectuée" />
-                        <TextArea maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="157.0" prefWidth="293.0" />
+                        <TextArea fx:id="reparationEffectuee" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="157.0" prefWidth="293.0" />
                      </children>
                   </VBox>
                </children>
             </HBox>
             <HBox prefHeight="100.0" prefWidth="200.0" spacing="10.0">
                <children>
-                  <Label prefHeight="26.0" prefWidth="50.0" text="Prénom:" />
-                  <TextField fx:id="clientName11" />
+                  <Label prefHeight="26.0" prefWidth="50.0" text="Tarif:" />
+                  <TextField fx:id="tarif" prefHeight="26.0" prefWidth="87.0" />
+                  <Label text="€" />
                </children>
             </HBox>
          </children>
@@ -98,18 +99,11 @@
             <Insets top="10.0" />
          </padding>
       </HBox>
-      <HBox alignment="CENTER_RIGHT" prefHeight="57.0" prefWidth="639.0" spacing="10.0">
-         <children>
-            <Label text="Tarif:" />
-            <TextField prefHeight="26.0" prefWidth="87.0" />
-            <Label text="€" />
-         </children>
-      </HBox>
       <ButtonBar prefHeight="70.0" prefWidth="652.0">
-        <buttons>
+         <buttons>
             <Button fx:id="printButton" mnemonicParsing="false" text="Imprimer le ticket" />
-          <Button fx:id="exitButton" mnemonicParsing="false" text="Fermer" />
-        </buttons>
+            <Button fx:id="exitButton" mnemonicParsing="false" text="Fermer" />
+         </buttons>
       </ButtonBar>
    </children>
    <padding>

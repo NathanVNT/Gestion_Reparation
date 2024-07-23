@@ -69,7 +69,8 @@ public class SelectClientController implements Initializable {
                     selectedClient.getPrenom(),
                     selectedClient.getTelephone(),
                     selectedClient.getEmail(),
-                    selectedClient.getSociete()
+                    selectedClient.getSociete(),
+                    selectedClient.getId() // Assurez-vous que cette méthode renvoie l'ID correct
             );
             closeStage();
         }
