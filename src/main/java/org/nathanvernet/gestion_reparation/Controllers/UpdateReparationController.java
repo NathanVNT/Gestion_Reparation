@@ -10,7 +10,6 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.nathanvernet.gestion_reparation.Application;
@@ -20,16 +19,13 @@ import org.nathanvernet.gestion_reparation.QRCodeGenerator;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.File;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.net.URL;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
@@ -71,18 +67,10 @@ public class UpdateReparationController implements Initializable {
     private static int idClient;
     @FXML
     private Button selectClient;
-    private ArrayList<String> etat = new ArrayList<>();
-    private String getReference;
     private QRCodeGenerator qrCodeGenerator = new QRCodeGenerator();
-    private ModeleReparation reparation;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        etat.add("Non traité");
-        etat.add("En cours");
-        etat.add("Traité");
-        remplirChoiceBoxEtat(etat);
-        choiceBoxEtat.setValue("Non traité"); // Set default value to "Non traité"
         try {
             remplirChoiceBoxReparateur(recupReparateur());
         } catch (SQLException e) {
@@ -132,7 +120,7 @@ public class UpdateReparationController implements Initializable {
             Optional<ButtonType> result = alert.showAndWait();
             if (result.isPresent()) {
                 if (result.get() == buttonTypeEnregistrer) {
-                    updateDataInDatabase();
+                    saveUpdateToDatabase();
                     stageClose();
                 } else if (result.get() == buttonTypeNePasEnregistrer) {
                     stageClose();
@@ -143,31 +131,28 @@ public class UpdateReparationController implements Initializable {
         }
     }
 
-    private void updateDataInDatabase() {
+    private void saveUpdateToDatabase() {
         try {
-            String query = "UPDATE reparation SET id_client = ?, details =?, reparation_effectuee = ?, etat = ?, id_reparateur = ?, tarif = ? WHERE id = ?";
+            String query = "UPDATE reparation SET details = ?, reparation_effectuee = ?, etat = ?, id_reparateur = ?, tarif = ?, date = ? WHERE numero_reparation = ?";
             PreparedStatement preparedStatement = gestionBDD.getConnection().prepareStatement(query);
-            preparedStatement.setInt(1, getClientId());
-            preparedStatement.setString(2, detailsPanne.getText());
-            preparedStatement.setString(3, reparationEffectuee.getText());
-            preparedStatement.setString(4, choiceBoxEtat.getValue());
-            preparedStatement.setInt(5, getReparateurId());
+            preparedStatement.setString(1, detailsPanne.getText());
+            preparedStatement.setString(2, reparationEffectuee.getText());
+            preparedStatement.setString(3, choiceBoxEtat.getValue());
+            preparedStatement.setInt(4, getReparateurId());
+
             // Handle optional tarif
             if (tarif.getText().isEmpty()) {
-                preparedStatement.setNull(6, java.sql.Types.DECIMAL);
+                preparedStatement.setNull(5, java.sql.Types.DECIMAL);
             } else {
-                preparedStatement.setBigDecimal(6, new BigDecimal(tarif.getText()));
+                preparedStatement.setBigDecimal(5, new BigDecimal(tarif.getText()));
             }
 
-            preparedStatement.setInt(7, reparation.getId());
+            preparedStatement.setDate(6, new java.sql.Date(System.currentTimeMillis()));
+            preparedStatement.setString(7, refReparation.getText());
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
-    }
-
-    private int getClientId() {
-        return idClient;
     }
 
     private int getReparateurId() {
@@ -192,80 +177,18 @@ public class UpdateReparationController implements Initializable {
         stage.close();
     }
 
-    private void remplirChoiceBoxReparateur(ArrayList<String> choix) {
+    private void remplirChoiceBoxReparateur(java.util.List<String> choix) {
         choiceBoxReparateur.getItems().clear();
         choiceBoxReparateur.getItems().addAll(choix);
     }
 
-    private void remplirChoiceBoxEtat(ArrayList<String> choix) {
-        choiceBoxEtat.getItems().clear();
-        choiceBoxEtat.getItems().addAll(choix);
-    }
-
-    private ArrayList<String> recupReparateur() throws SQLException {
+    private java.util.List<String> recupReparateur() throws SQLException {
         return gestionBDD.RecupReparateur();
     }
 
-    private void print() throws IOException {
-        Stage printStage = new Stage();
-        VBox printVBox = new VBox(10);
-        printVBox.setStyle("-fx-padding: 20px;");
-
-        // Load the logo image
-        ImageView logoImageView = new ImageView(new Image(String.valueOf(getClass().getResource("./logo.png"))));
-        logoImageView.setFitWidth(100);
-        logoImageView.setPreserveRatio(true);
-
-        Label titleLabel = new Label("NV Informatique");
-        titleLabel.setStyle("-fx-font-size: 20px; -fx-font-weight: bold;");
-        Label refLabel = new Label("Fiche réparation (N° " + reparation.getNumeroReparation() + ")");
-        refLabel.setStyle("-fx-font-weight: bold;");
-
-        Label clientLabel = new Label("Client: ");
-        Label clientDetails = new Label("Nom: " + nomClient + "\nPrénom: " + prenomClient + "\nTel: " + telClient + "\nE-Mail: " + emailClient + "\nSociété: " + societeClient);
-
-        Label panneLabel = new Label("Détail de la panne: ");
-        Label panneDetails = new Label(detailsPanne.getText());
-
-        Label reparationLabel = new Label("Réparations effectuées: ");
-        Label reparationDetails = new Label(reparationEffectuee.getText());
-        Label reparateurLabel = new Label("Réparateur: " + choiceBoxReparateur.getValue());
-
-        BigDecimal tarifHT = tarif.getText().isEmpty() ? BigDecimal.ZERO : new BigDecimal(tarif.getText());
-        Label tarifLabel = new Label("Tarif HT: " + tarifHT + " €");
-
-        // Load the QR code image
-        ImageView qrCodeImageView = new ImageView();
-        File qrCodeFile = new File("/Users/nathan/DEV/" + reparation.getNumeroReparation() + ".png");
-        BufferedImage bufferedImage = ImageIO.read(qrCodeFile);
-        WritableImage qrCodeWritableImage = SwingFXUtils.toFXImage(bufferedImage, null);
-        qrCodeImageView.setImage(qrCodeWritableImage);
-
-        // Add elements to the VBox
-        printVBox.getChildren().addAll(logoImageView, titleLabel, refLabel, clientLabel, clientDetails, panneLabel, panneDetails, reparationLabel, reparationDetails, reparateurLabel, tarifLabel, qrCodeImageView);
-
-        Scene printScene = new Scene(printVBox);
-        printStage.setScene(printScene);
-
-        PrinterJob job = PrinterJob.createPrinterJob();
-        if (job != null && job.showPrintDialog(printStage)) {
-            boolean success = job.printPage(printVBox);
-            if (success) {
-                job.endJob();
-            }
-        }
-    }
-
     public void setReparation(ModeleReparation reparation) {
-        this.reparation = reparation;
         refReparation.setText(reparation.getNumeroReparation());
-        detailsPanne.setText(reparation.getDetails());
-        reparationEffectuee.setText(reparation.getReparationEffectuee());
-        choiceBoxEtat.setValue(reparation.getEtat());
-        tarif.setText(reparation.getTarif() != null ? reparation.getTarif().toString() : "");
-        choiceBoxReparateur.setValue(reparation.getReparateur());
 
-        // Set client details
         nomClient = reparation.getNomClient();
         prenomClient = reparation.getPrenomClient();
         telClient = reparation.getTelClient();
@@ -273,7 +196,23 @@ public class UpdateReparationController implements Initializable {
         societeClient = reparation.getSocieteClient();
         idClient = reparation.getClientId();
 
-        setClientTextField();
+        clientNom.setText(nomClient);
+        clientPrenom.setText(prenomClient);
+        clientTel.setText(telClient);
+        clientMail.setText(emailClient);
+        clientSociete.setText(societeClient);
+
+        detailsPanne.setText(reparation.getDetails());
+        reparationEffectuee.setText(reparation.getReparationEffectuee());
+        choiceBoxEtat.setValue(reparation.getEtat());
+        choiceBoxReparateur.setValue(reparation.getReparateur());
+
+        // Vérifiez si le tarif est null avant de l'utiliser
+        if (reparation.getTarif() != null) {
+            tarif.setText(reparation.getTarif().toString());
+        } else {
+            tarif.setText("");
+        }
     }
 
     public void setClient(String nom, String prenom, String tel, String email, String societe, int id) {
@@ -283,14 +222,84 @@ public class UpdateReparationController implements Initializable {
         emailClient = email;
         societeClient = societe;
         idClient = id;
-        setClientTextField();
-    }
 
-    private void setClientTextField() {
         clientNom.setText(nomClient);
         clientPrenom.setText(prenomClient);
         clientTel.setText(telClient);
         clientMail.setText(emailClient);
         clientSociete.setText(societeClient);
+    }
+
+    private void print() throws IOException {
+        // Configuration de l'impression
+        PrinterJob job = PrinterJob.createPrinterJob();
+        if (job != null && job.showPrintDialog(null)) {
+            VBox vbox = createPrintContent();
+            if (job.printPage(vbox)) {
+                job.endJob();
+            }
+        }
+    }
+
+    private VBox createPrintContent() throws IOException {
+        VBox vbox = new VBox();
+        vbox.setStyle("-fx-padding: 20px; -fx-spacing: 10px;");
+        // Ajouter les informations légales
+        Label legalInfo = new Label("Informations légales de l'entreprise: NV Informatique - Entrepreneur Individuel, N° SIRET: 91745027200013");
+        legalInfo.setStyle("-fx-font-size: 10px;");
+        vbox.getChildren().add(legalInfo);
+        // Ajout du logo
+        Image logo = new Image(String.valueOf(getClass().getResource("/org/nathanvernet/gestion_reparation/logo.png")));
+        ImageView logoImageView = new ImageView(logo);
+        logoImageView.setFitWidth(100);
+        logoImageView.setPreserveRatio(true);
+        vbox.getChildren().add(logoImageView);
+
+        Label titleLabel = new Label("NV Informatique");
+        titleLabel.setStyle("-fx-font-size: 20px; -fx-font-weight: bold;");
+        vbox.getChildren().add(titleLabel);
+
+        Label refLabel = new Label("Fiche réparation (N° " + refReparation.getText() + ")");
+        refLabel.setStyle("-fx-font-weight: bold;");
+        vbox.getChildren().add(refLabel);
+
+        Label clientLabel = new Label("Client: ");
+        clientLabel.setStyle("-fx-font-weight: bold;");
+        vbox.getChildren().add(clientLabel);
+
+        Label clientDetails = new Label("Nom: " + nomClient + "\nPrénom: " + prenomClient + "\nTel: " + telClient + "\nE-Mail: " + emailClient + "\nSociété: " + societeClient);
+        vbox.getChildren().add(clientDetails);
+
+        Label panneLabel = new Label("Détail de la panne: ");
+        vbox.getChildren().add(panneLabel);
+        Label panneDetails = new Label(detailsPanne.getText());
+        vbox.getChildren().add(panneDetails);
+
+        Label reparationLabel = new Label("Réparations effectuées: ");
+        vbox.getChildren().add(reparationLabel);
+        Label reparationDetails = new Label(reparationEffectuee.getText());
+        vbox.getChildren().add(reparationDetails);
+
+        Label reparateurLabel = new Label("Réparateur: " + choiceBoxReparateur.getValue());
+        vbox.getChildren().add(reparateurLabel);
+
+        BigDecimal tarifHT = tarif.getText().isEmpty() ? BigDecimal.ZERO : new BigDecimal(tarif.getText());
+        Label tarifLabel = new Label("Tarif: " + tarifHT + " €");
+        vbox.getChildren().add(tarifLabel);
+
+        // Générer et ajouter le QR code
+        byte[] qrCodeBytes = qrCodeGenerator.generateQRCode(refReparation.getText());
+        BufferedImage bufferedImage = ImageIO.read(new ByteArrayInputStream(qrCodeBytes));
+        WritableImage qrCodeWritableImage = SwingFXUtils.toFXImage(bufferedImage, null);
+        ImageView qrCodeImageView = new ImageView(qrCodeWritableImage);
+        qrCodeImageView.setFitWidth(100);
+        qrCodeImageView.setPreserveRatio(true);
+        vbox.getChildren().add(qrCodeImageView);
+
+        return vbox;
+    }
+
+    public void setUpdateReparationController(UpdateReparationController controller) {
+        // Implementation pour le SelectClientController
     }
 }

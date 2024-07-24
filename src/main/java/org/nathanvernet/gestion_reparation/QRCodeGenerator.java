@@ -20,6 +20,11 @@ public class QRCodeGenerator {
         ByteArrayOutputStream out = QRCode.from(reference).to(ImageType.PNG).stream();
         return out.toByteArray();
     }
+    public void generateQRCodeImage(String text, int width, int height, ByteArrayOutputStream stream) throws IOException {
+        ByteArrayOutputStream qrCodeStream = QRCode.from(text).withSize(width, height).to(ImageType.PNG).stream();
+        stream.write(qrCodeStream.toByteArray());
+        stream.close();
+    }
 
     /**
      * Enregistre le code QR dans un fichier.
