@@ -33,6 +33,7 @@ public class SelectClientController implements Initializable {
     private TableColumn<ModeleClient, String> colCommentaire;
 
     private AddReparationController addReparationController;
+    private UpdateReparationController updateReparationController;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -55,6 +56,10 @@ public class SelectClientController implements Initializable {
         this.addReparationController = addReparationController;
     }
 
+    public void setUpdateReparationController(UpdateReparationController updateReparationController) {
+        this.updateReparationController = updateReparationController;
+    }
+
     private void remplirTableView() throws SQLException {
         ArrayList<ModeleClient> clients = Application.gestionBDD.getClients();
         tableViewClients.getItems().setAll(clients);
@@ -64,20 +69,26 @@ public class SelectClientController implements Initializable {
     private void handleSelectButtonAction() {
         ModeleClient selectedClient = tableViewClients.getSelectionModel().getSelectedItem();
         if (selectedClient != null) {
-            addReparationController.setClient(
-                    selectedClient.getNom(),
-                    selectedClient.getPrenom(),
-                    selectedClient.getTelephone(),
-                    selectedClient.getEmail(),
-                    selectedClient.getSociete(),
-                    selectedClient.getId() // Assurez-vous que cette méthode renvoie l'ID correct
-            );
-            closeStage();
+            if (addReparationController != null) {
+                addReparationController.setClient(
+                        selectedClient.getNom(),
+                        selectedClient.getPrenom(),
+                        selectedClient.getTelephone(),
+                        selectedClient.getEmail(),
+                        selectedClient.getSociete(),
+                        selectedClient.getId());
+            } else if (updateReparationController != null) {
+                updateReparationController.setClient(
+                        selectedClient.getNom(),
+                        selectedClient.getPrenom(),
+                        selectedClient.getTelephone(),
+                        selectedClient.getEmail(),
+                        selectedClient.getSociete(),
+                        selectedClient.getId()
+                );
+            }
+            Stage stage = (Stage) tableViewClients.getScene().getWindow();
+            stage.close();
         }
-    }
-
-    private void closeStage() {
-        Stage stage = (Stage) tableViewClients.getScene().getWindow();
-        stage.close();
     }
 }

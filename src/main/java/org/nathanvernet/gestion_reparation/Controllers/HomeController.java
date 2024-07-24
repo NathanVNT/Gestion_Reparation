@@ -3,11 +3,12 @@ package org.nathanvernet.gestion_reparation.Controllers;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
-import javafx.scene.Parent;
+import javafx.stage.WindowEvent;
 import org.nathanvernet.gestion_reparation.Application;
 import org.nathanvernet.gestion_reparation.BDD.GestionBDD;
 import org.nathanvernet.gestion_reparation.Modele.ModeleReparation;
@@ -105,15 +106,6 @@ public class HomeController implements Initializable {
             }
         });
 
-        initializeTableColumns();
-        try {
-            loadReparations();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void initializeTableColumns() {
         colDate.setCellValueFactory(new PropertyValueFactory<>("date"));
         colNumeroReparation.setCellValueFactory(new PropertyValueFactory<>("numeroReparation"));
         colNomClient.setCellValueFactory(new PropertyValueFactory<>("nomClient"));
@@ -123,21 +115,27 @@ public class HomeController implements Initializable {
         colEtat.setCellValueFactory(new PropertyValueFactory<>("etat"));
         colReparateur.setCellValueFactory(new PropertyValueFactory<>("reparateur"));
         colTarif.setCellValueFactory(new PropertyValueFactory<>("tarif"));
-    }
 
-    private void openNouvelleReparation() throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(Application.class.getResource("add-reparation.fxml"));
-        Scene scene = new Scene(fxmlLoader.load());
-        Stage stage = new Stage();
-        stage.setScene(scene);
-        stage.setTitle("Nouvelle Reparation");
-        stage.show();
-    }
+        try {
+            loadReparations();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
-    private void loadListeClients() throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(Application.class.getResource("clients-page.fxml"));
-        Parent root = fxmlLoader.load();
-        currentScene.setRoot(root);
+        tableViewReparations.setRowFactory(tv -> {
+            TableRow<ModeleReparation> row = new TableRow<>();
+            row.setOnMouseClicked(event -> {
+                if (event.getClickCount() == 2 && (!row.isEmpty())) {
+                    ModeleReparation rowData = row.getItem();
+                    try {
+                        openModifierReparation(rowData);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+            return row;
+        });
     }
 
     private void loadReparations() throws SQLException {
@@ -149,5 +147,49 @@ public class HomeController implements Initializable {
         String searchTerm = textFieldRechercheReparation.getText();
         ArrayList<ModeleReparation> reparations = gestionBDD.searchReparations(searchTerm);
         tableViewReparations.getItems().setAll(reparations);
+    }
+
+    private void openNouvelleReparation() throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(Application.class.getResource("add-reparation.fxml"));
+        Scene scene = new Scene(fxmlLoader.load());
+        Stage stage = new Stage();
+        stage.setScene(scene);
+        stage.setTitle("Nouvelle Reparation");
+        stage.show();
+
+        stage.setOnHidden(event -> {
+            try {
+                loadReparations();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        });
+    }
+
+    private void openModifierReparation(ModeleReparation reparation) throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(Application.class.getResource("update-reparation.fxml"));
+        Scene scene = new Scene(fxmlLoader.load());
+        Stage stage = new Stage();
+        stage.setScene(scene);
+        stage.setTitle("Modifier Reparation");
+
+        UpdateReparationController controller = fxmlLoader.getController();
+        controller.setReparation(reparation);
+
+        stage.show();
+
+        stage.setOnHidden(event -> {
+            try {
+                loadReparations();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        });
+    }
+
+    private void loadListeClients() throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(Application.class.getResource("clients-page.fxml"));
+        Parent root = fxmlLoader.load();
+        currentScene.setRoot(root);
     }
 }

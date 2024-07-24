@@ -58,19 +58,23 @@ public class GestionBDD {
     public ArrayList<ModeleReparation> getReparations() throws SQLException {
         ConnexionBDD();
         ArrayList<ModeleReparation> reparations = new ArrayList<>();
-        resultSet = statement.executeQuery("SELECT reparation.*, client.nom AS nomClient, client.prenom AS prenomClient, reparateur.prenom AS prenomReparateur FROM reparation INNER JOIN client ON reparation.id_client = client.id INNER JOIN reparateur ON reparation.id_reparateur = reparateur.id");
+        resultSet = statement.executeQuery("SELECT reparation.*, client.nom AS nomClient, client.prenom AS prenomClient, client.telephone AS telClient, client.mail AS emailClient, client.societe AS societeClient, reparateur.prenom AS prenomReparateur FROM reparation INNER JOIN client ON reparation.id_client = client.id INNER JOIN reparateur ON reparation.id_reparateur = reparateur.id");
         while (resultSet.next()) {
             int id = resultSet.getInt("id");
             Date date = resultSet.getDate("date");
             String numeroReparation = resultSet.getString("numero_reparation");
             String nomClient = resultSet.getString("nomClient");
             String prenomClient = resultSet.getString("prenomClient");
+            String telClient = resultSet.getString("telClient");
+            String emailClient = resultSet.getString("emailClient");
+            String societeClient = resultSet.getString("societeClient");
             String details = resultSet.getString("details");
             String reparationEffectuee = resultSet.getString("reparation_effectuee");
             String etat = resultSet.getString("etat");
             String prenomReparateur = resultSet.getString("prenomReparateur");
             BigDecimal tarif = resultSet.getBigDecimal("tarif");
-            ModeleReparation reparation = new ModeleReparation(id, date, numeroReparation, nomClient, prenomClient, details, reparationEffectuee, etat, prenomReparateur, tarif);
+            int idClient = resultSet.getInt("id_client");
+            ModeleReparation reparation = new ModeleReparation(id, date, numeroReparation, nomClient, prenomClient, details, reparationEffectuee, etat, prenomReparateur, tarif, idClient, telClient, emailClient, societeClient);
             reparations.add(reparation);
         }
         return reparations;
@@ -80,7 +84,7 @@ public class GestionBDD {
     public ArrayList<ModeleReparation> searchReparations(String searchTerm) throws SQLException {
         ConnexionBDD();
         ArrayList<ModeleReparation> reparations = new ArrayList<>();
-        String query = "SELECT reparation.*, client.nom AS nomClient, client.prenom AS prenomClient, reparateur.prenom AS prenomReparateur FROM reparation INNER JOIN client ON reparation.id_client = client.id INNER JOIN reparateur ON reparation.id_reparateur = reparateur.id WHERE client.nom LIKE ? OR client.prenom LIKE ? OR reparation.numero_reparation LIKE ?";
+        String query = "SELECT reparation.*, client.nom AS nomClient, client.prenom AS prenomClient, client.telephone AS telClient, client.mail AS emailClient, client.societe AS societeClient, reparateur.prenom AS prenomReparateur FROM reparation INNER JOIN client ON reparation.id_client = client.id INNER JOIN reparateur ON reparation.id_reparateur = reparateur.id WHERE client.nom LIKE ? OR client.prenom LIKE ? OR reparation.numero_reparation LIKE ?";
         PreparedStatement preparedStatement = connection.prepareStatement(query);
         preparedStatement.setString(1, "%" + searchTerm + "%");
         preparedStatement.setString(2, "%" + searchTerm + "%");
@@ -92,12 +96,16 @@ public class GestionBDD {
             String numeroReparation = resultSet.getString("numero_reparation");
             String nomClient = resultSet.getString("nomClient");
             String prenomClient = resultSet.getString("prenomClient");
+            String telClient = resultSet.getString("telClient");
+            String emailClient = resultSet.getString("emailClient");
+            String societeClient = resultSet.getString("societeClient");
             String details = resultSet.getString("details");
             String reparationEffectuee = resultSet.getString("reparation_effectuee");
             String etat = resultSet.getString("etat");
             String prenomReparateur = resultSet.getString("prenomReparateur");
             BigDecimal tarif = resultSet.getBigDecimal("tarif");
-            ModeleReparation reparation = new ModeleReparation(id, date, numeroReparation, nomClient, prenomClient, details, reparationEffectuee, etat, prenomReparateur, tarif);
+            int idClient = resultSet.getInt("id_client");
+            ModeleReparation reparation = new ModeleReparation(id, date, numeroReparation, nomClient, prenomClient, details, reparationEffectuee, etat, prenomReparateur, tarif, idClient, telClient, emailClient, societeClient);
             reparations.add(reparation);
         }
         return reparations;

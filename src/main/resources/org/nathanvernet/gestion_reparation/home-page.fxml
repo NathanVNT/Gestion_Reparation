@@ -44,6 +44,7 @@
             <children>
                 <HBox prefHeight="31.0" prefWidth="572.0" spacing="30.0">
                     <children>
+                  <Button fx:id="nouveauClient" mnemonicParsing="false" text="Nouveau Client" />
                         <Button fx:id="nouvelleReparation" mnemonicParsing="false" text="Nouvelle réparation" />
                         <HBox prefHeight="26.0" prefWidth="293.0" spacing="10.0">
                             <children>
@@ -56,7 +57,7 @@
                         <Insets bottom="10.0" left="10.0" top="10.0" />
                     </VBox.margin>
                 </HBox>
-                <TableView fx:id="tableViewReparations" prefHeight="605.0" prefWidth="572.0">
+                <TableView fx:id="tableViewReparations" prefHeight="669.0" prefWidth="572.0">
                     <columns>
                         <TableColumn fx:id="colDate" text="Date" />
                         <TableColumn fx:id="colNumeroReparation" text="Numéro Réparation" />
