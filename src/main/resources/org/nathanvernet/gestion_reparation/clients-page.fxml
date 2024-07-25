@@ -1,28 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.net.URL?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="634.0" prefWidth="994.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.nathanvernet.gestion_reparation.Controllers.ClientsController">
+<?import java.net.URL?>
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="634.0" prefWidth="858.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.nathanvernet.gestion_reparation.Controllers.ClientsController">
     <stylesheets>
         <URL value="@/style.css" />
     </stylesheets>
     <top>
-        <MenuBar styleClass="menu-bar" BorderPane.alignment="CENTER">
+        <MenuBar BorderPane.alignment="CENTER" styleClass="menu-bar">
             <menus>
                 <Menu mnemonicParsing="false" text="Fichier">
                     <items>
                         <MenuItem fx:id="fichier_nouvelle_reparation" mnemonicParsing="false" text="Nouvelle réparation" />
-                        <MenuItem fx:id="fichier_nouveau_client" mnemonicParsing="false" text="Nouveau Client" />
+                        <MenuItem fx:id="fichier_nouveau_client" mnemonicParsing="false" text="Nouveau client" />
                         <MenuItem fx:id="close" mnemonicParsing="false" text="Fermer" />
                     </items>
                 </Menu>
@@ -37,8 +38,8 @@
     <left>
         <VBox alignment="CENTER" prefHeight="607.0" prefWidth="286.0" spacing="30.0" BorderPane.alignment="CENTER">
             <children>
-                <Button fx:id="listeReparationsPage" mnemonicParsing="false" styleClass="sidebar-button" text="Liste des Réparations" />
-                <Button mnemonicParsing="false" styleClass="sidebar-button" text="Liste des clients" />
+                <Button fx:id="listeReparationsPage" mnemonicParsing="false" text="Liste des Réparations" styleClass="button" />
+                <Button mnemonicParsing="false" text="Liste des clients" styleClass="button" />
             </children>
         </VBox>
     </left>
@@ -47,11 +48,11 @@
             <children>
                 <HBox prefHeight="31.0" prefWidth="572.0" spacing="30.0">
                     <children>
-                        <Button fx:id="nouveauClient" mnemonicParsing="false" styleClass="top-button" text="Nouveau Client" />
+                        <Button fx:id="nouveauClient" mnemonicParsing="false" text="Nouveau client" styleClass="button" />
                         <HBox prefHeight="26.0" prefWidth="293.0" spacing="10.0">
                             <children>
                                 <TextField fx:id="textFieldRechercheClient" promptText="Client" styleClass="search-field" />
-                                <Button fx:id="rechercheClient" mnemonicParsing="false" prefHeight="26.0" prefWidth="147.0" styleClass="top-button" text="Recherche Client" />
+                                <Button fx:id="rechercheClient" mnemonicParsing="false" prefHeight="26.0" prefWidth="147.0" text="Recherche Client" styleClass="button" />
                             </children>
                         </HBox>
                     </children>
@@ -59,10 +60,23 @@
                         <Insets bottom="10.0" left="10.0" top="10.0" />
                     </VBox.margin>
                 </HBox>
-                <ListView prefHeight="669.0" prefWidth="572.0" />
-                <VBox alignment="TOP_RIGHT" prefHeight="25.0" prefWidth="703.0">
+                <TableView fx:id="tableViewClients" prefHeight="669.0" prefWidth="572.0">
+                    <columns>
+                        <TableColumn fx:id="colNom" text="Nom" />
+                        <TableColumn fx:id="colPrenom" text="Prénom" />
+                        <TableColumn fx:id="colTelephone" text="Téléphone" />
+                        <TableColumn fx:id="colMail" text="Mail" />
+                        <TableColumn fx:id="colAdresse" text="Adresse" />
+                        <TableColumn fx:id="colCodePostal" text="Code Postal" />
+                        <TableColumn fx:id="colVille" text="Ville" />
+                        <TableColumn fx:id="colType" text="Type" />
+                        <TableColumn fx:id="colSociete" text="Société" />
+                        <TableColumn fx:id="colCommentaire" text="Commentaire" />
+                    </columns>
+                </TableView>
+                <VBox alignment="TOP_RIGHT" prefHeight="200.0" prefWidth="100.0">
                     <children>
-                        <Button fx:id="boutonActualiser" mnemonicParsing="false" styleClass="refresh-button" text="Actualiser" />
+                        <Button fx:id="boutonActualiser" mnemonicParsing="false" text="Actualiser" styleClass="button" />
                     </children>
                     <VBox.margin>
                         <Insets right="5.0" top="5.0" />

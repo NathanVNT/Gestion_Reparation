@@ -33,28 +33,29 @@ public class GestionBDD {
     }
 
     public ArrayList<ModeleClient> getClients() throws SQLException {
-        ConnexionBDD();
         ArrayList<ModeleClient> clients = new ArrayList<>();
-        resultSet = statement.executeQuery("SELECT * FROM client");
+        String query = "SELECT * FROM client";
+        PreparedStatement preparedStatement = connection.prepareStatement(query);
+        ResultSet resultSet = preparedStatement.executeQuery();
+
         while (resultSet.next()) {
-            int id = resultSet.getInt("id");
-            String nom = resultSet.getString("nom");
-            String prenom = resultSet.getString("prenom");
-            String codePostal = resultSet.getString("code_postal");
-            String adresse = resultSet.getString("adresse");
-            String ville = resultSet.getString("ville");
-            String type = resultSet.getString("type");
-            String societe = resultSet.getString("societe");
-            String commentaire = resultSet.getString("commentaire");
-            String telephone = resultSet.getString("telephone");
-            String email = resultSet.getString("mail");
-            ModeleClient client = new ModeleClient(id, nom, prenom, codePostal, adresse, ville, type, societe, commentaire, telephone, email);
+            ModeleClient client = new ModeleClient(
+                    resultSet.getInt("id"),
+                    resultSet.getString("nom"),
+                    resultSet.getString("prenom"),
+                    resultSet.getString("code_postal"),
+                    resultSet.getString("adresse"),
+                    resultSet.getString("ville"),
+                    resultSet.getString("type"),
+                    resultSet.getString("societe"),
+                    resultSet.getString("commentaire"),
+                    resultSet.getString("telephone"),
+                    resultSet.getString("mail")
+            );
             clients.add(client);
         }
         return clients;
-    }
-
-    // Ajout de la méthode getReparations()
+    }    // Ajout de la méthode getReparations()
     public ArrayList<ModeleReparation> getReparations() throws SQLException {
         ConnexionBDD();
         ArrayList<ModeleReparation> reparations = new ArrayList<>();
