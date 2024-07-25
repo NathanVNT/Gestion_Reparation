@@ -257,7 +257,7 @@ public class UpdateReparationController implements Initializable {
         VBox vbox = new VBox();
         vbox.setStyle("-fx-padding: 20px; -fx-spacing: 10px;");
         // Ajouter les informations légales
-        Label legalInfo = new Label("Informations légales de l'entreprise: NV Informatique - Entrepreneur Individuel, N° SIRET: 91745027200013");
+        Label legalInfo = new Label("NV Informatique - Entrepreneur Individuel, N° SIRET: 91745027200013");
         legalInfo.setStyle("-fx-font-size: 10px;");
         vbox.getChildren().add(legalInfo);
         // Ajout du logo
