@@ -6,6 +6,9 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.print.PrinterJob;
 import javafx.scene.Scene;
+
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -265,8 +268,10 @@ public class AddReparationController implements Initializable {
         Label clientLabel = new Label("Client: ");
         clientLabel.setStyle("-fx-font-weight: bold;");
         vbox.getChildren().add(clientLabel);
-
-        Label clientDetails = new Label("Nom: " + nomClient + "\nPrénom: " + prenomClient + "\nTel: " + telClient + "\nE-Mail: " + emailClient + "\nSociété: " + societeClient);
+        Date date = new Date();
+        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+        String dateString = format.format(date);
+        Label clientDetails = new Label("Le: "+ dateString + "\nNom: " + nomClient + "\nPrénom: " + prenomClient + "\nTel: " + telClient + "\nE-Mail: " + emailClient + "\nSociété: " + societeClient);
         vbox.getChildren().add(clientDetails);
 
         Label panneLabel = new Label("Détail de la panne: ");

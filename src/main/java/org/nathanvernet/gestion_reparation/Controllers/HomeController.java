@@ -8,7 +8,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
 import org.nathanvernet.gestion_reparation.Application;
 import org.nathanvernet.gestion_reparation.BDD.GestionBDD;
 import org.nathanvernet.gestion_reparation.Modele.ModeleReparation;
@@ -18,6 +17,8 @@ import java.math.BigDecimal;
 import java.net.URL;
 import java.sql.Date;
 import java.sql.SQLException;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
@@ -75,6 +76,13 @@ public class HomeController implements Initializable {
                 throw new RuntimeException(e);
             }
         });
+        fichier_nouveau_client.setOnAction(event -> {
+            try {
+                openAddClientPage();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
         nouveauClient.setOnAction(event -> {
             try {
                 openAddClientPage();
@@ -122,6 +130,19 @@ public class HomeController implements Initializable {
         colEtat.setCellValueFactory(new PropertyValueFactory<>("etat"));
         colReparateur.setCellValueFactory(new PropertyValueFactory<>("reparateur"));
         colTarif.setCellValueFactory(new PropertyValueFactory<>("tarif"));
+        colTarif.setCellFactory(column -> new TableCell<ModeleReparation, BigDecimal>() {
+            private final DecimalFormat df = createDecimalFormat();
+
+            @Override
+            protected void updateItem(BigDecimal item, boolean empty) {
+                super.updateItem(item, empty);
+                if (item == null || empty) {
+                    setText(null);
+                } else {
+                    setText(df.format(item) + " €");
+                }
+            }
+        });
 
         try {
             loadReparations();
@@ -144,6 +165,14 @@ public class HomeController implements Initializable {
             return row;
         });
     }
+
+    private DecimalFormat createDecimalFormat() {
+        DecimalFormatSymbols symbols = new DecimalFormatSymbols();
+        symbols.setGroupingSeparator(' ');
+        symbols.setDecimalSeparator(',');
+        return new DecimalFormat("#,##0.00", symbols);
+    }
+
     private void openAddClientPage() throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(Application.class.getResource("add-client.fxml"));
         Parent root = fxmlLoader.load();
@@ -152,6 +181,7 @@ public class HomeController implements Initializable {
         stage.setTitle("Nouveau Client");
         stage.show();
     }
+
     private void loadReparations() throws SQLException {
         ArrayList<ModeleReparation> reparations = gestionBDD.getReparations();
         tableViewReparations.getItems().setAll(reparations);
@@ -207,4 +237,5 @@ public class HomeController implements Initializable {
         Scene scene = nouvelleReparation.getScene();
         scene.setRoot(root);
     }
+
 }

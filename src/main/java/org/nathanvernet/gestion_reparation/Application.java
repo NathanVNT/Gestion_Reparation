@@ -3,6 +3,7 @@ package org.nathanvernet.gestion_reparation;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import org.nathanvernet.gestion_reparation.BDD.GestionBDD;
 
@@ -20,6 +21,8 @@ public class Application extends javafx.application.Application {
         stage.setTitle("Gestion Réparation by Nathan VERNET");
         stage.setScene(scene);
 
+        // Set the application icon
+        stage.getIcons().add(new Image(getClass().getResourceAsStream("/logo.png"))); // Set the application icon
         // Maximize the window
         stage.setMaximized(true);
 

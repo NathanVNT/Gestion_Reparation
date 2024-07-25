@@ -14,14 +14,21 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import org.nathanvernet.gestion_reparation.Application;
 import org.nathanvernet.gestion_reparation.Modele.ModeleClient;
+import org.nathanvernet.gestion_reparation.Modele.ModeleReparation;
 
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
+
+import static org.nathanvernet.gestion_reparation.Application.gestionBDD;
 
 public class ClientsController implements Initializable {
     public Button nouveauClient;
+    public MenuItem fichier_nouvelle_reparation;
+    public MenuItem fichier_nouveau_client;
+    public MenuItem close;
     @FXML
     private TableView<ModeleClient> tableViewClients;
     @FXML
@@ -70,7 +77,23 @@ public class ClientsController implements Initializable {
         colSociete.setCellValueFactory(new PropertyValueFactory<>("societe"));
 
         loadClients();
-
+        close.setOnAction(event -> {
+            System.exit(0);
+        });
+        fichier_nouvelle_reparation.setOnAction(event -> {
+            try {
+                openNouvelleReparation();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
+        fichier_nouveau_client.setOnAction(event -> {
+            try {
+                openAddClientPage();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
         tableViewClients.setOnMouseClicked(event -> {
             if (event.getClickCount() == 2 && tableViewClients.getSelectionModel().getSelectedItem() != null) {
                 ModeleClient selectedClient = tableViewClients.getSelectionModel().getSelectedItem();
@@ -81,6 +104,7 @@ public class ClientsController implements Initializable {
                 }
             }
         });
+
 
         boutonActualiser.setOnAction(event -> loadClients());
 
@@ -112,7 +136,7 @@ public class ClientsController implements Initializable {
     }
     private void loadClients() {
         try {
-            clientList = FXCollections.observableArrayList(Application.gestionBDD.getClients());
+            clientList = FXCollections.observableArrayList(gestionBDD.getClients());
             filteredClientList = new FilteredList<>(clientList, p -> true);
             tableViewClients.setItems(filteredClientList);
         } catch (SQLException e) {
@@ -164,4 +188,14 @@ public class ClientsController implements Initializable {
         alert.setContentText(content);
         alert.showAndWait();
     }
+    private void openNouvelleReparation() throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(Application.class.getResource("add-reparation.fxml"));
+        Scene scene = new Scene(fxmlLoader.load());
+        Stage stage = new Stage();
+        stage.setScene(scene);
+        stage.setTitle("Nouvelle Reparation");
+        stage.show();
+    }
+
+
 }
