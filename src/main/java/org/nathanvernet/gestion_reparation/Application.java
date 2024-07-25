@@ -3,7 +3,6 @@ package org.nathanvernet.gestion_reparation;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
-import javafx.stage.Popup;
 import javafx.stage.Stage;
 import org.nathanvernet.gestion_reparation.BDD.GestionBDD;
 
@@ -12,16 +11,22 @@ import java.sql.SQLException;
 
 public class Application extends javafx.application.Application {
     public static GestionBDD gestionBDD = new GestionBDD();
+
     @Override
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(Application.class.getResource("home-page.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
+        scene.getStylesheets().add(getClass().getResource("/style.css").toExternalForm());
         stage.setTitle("Gestion Réparation by Nathan VERNET");
         stage.setScene(scene);
+
+        // Maximize the window
+        stage.setMaximized(true);
+
         stage.show();
         getBDD();
-
     }
+
     private void getBDD() {
         try {
             gestionBDD.ConnexionBDD();
@@ -34,6 +39,7 @@ public class Application extends javafx.application.Application {
             System.exit(0);
         }
     }
+
     public static void main(String[] args) {
         launch();
     }

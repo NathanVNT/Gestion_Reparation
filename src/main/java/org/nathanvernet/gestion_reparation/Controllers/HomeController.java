@@ -83,10 +83,9 @@ public class HomeController implements Initializable {
         });
         pageListeClients.setOnAction(event -> {
             try {
-                currentScene = nouvelleReparation.getScene();
-                loadListeClients();
+                openListeClients();
             } catch (IOException e) {
-                throw new RuntimeException(e);
+                e.printStackTrace();
             }
         });
 
@@ -187,9 +186,10 @@ public class HomeController implements Initializable {
         });
     }
 
-    private void loadListeClients() throws IOException {
+    private void openListeClients() throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(Application.class.getResource("clients-page.fxml"));
         Parent root = fxmlLoader.load();
-        currentScene.setRoot(root);
+        Scene scene = nouvelleReparation.getScene();
+        scene.setRoot(root);
     }
 }

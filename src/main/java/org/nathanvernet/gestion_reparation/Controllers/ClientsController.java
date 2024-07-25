@@ -14,11 +14,12 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 public class ClientsController implements Initializable {
-    private Scene currentScene;
     public Button listeReparationsPage;
-    public ClientsController(GestionBDD gestionBDD) {
+    private Scene currentScene;
 
+    public ClientsController() {
     }
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         listeReparationsPage.setOnAction(event -> {
@@ -30,17 +31,11 @@ public class ClientsController implements Initializable {
             }
         });
     }
-    private void openNouveauClient() throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(Application.class.getResource("add-client.fxml"));
-        Scene scene = new Scene(fxmlLoader.load());
-        Stage stage = new Stage();
-        stage.setScene(scene);
-        stage.setTitle("Nouveau Client");
-        stage.show();
-    }
+
     private void loadListeReparations() throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(Application.class.getResource("home-page.fxml"));
         Parent root = fxmlLoader.load();
-        currentScene.setRoot(root);
+        Scene scene = listeReparationsPage.getScene();
+        scene.setRoot(root);
     }
 }

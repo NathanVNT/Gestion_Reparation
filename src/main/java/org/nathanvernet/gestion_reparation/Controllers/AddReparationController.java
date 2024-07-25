@@ -84,12 +84,6 @@ public class AddReparationController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         getReference = generateReference();
         refReparation.setText(getReference);
-        try {
-            // Generate QR code and save as byte array
-            qrCodeBytes = qrCodeGenerator.generateQRCode(getReference);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
         setClientTextField();
         etat.add("Non traité");
         etat.add("En cours");
@@ -158,8 +152,8 @@ public class AddReparationController implements Initializable {
 
     private void saveDataToDatabase() {
         try {
-            String query = "INSERT INTO reparation (numero_reparation, id_client, details, reparation_effectuee, etat, id_reparateur, tarif, date, qr_code) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) " +
-                    "ON DUPLICATE KEY UPDATE details=VALUES(details), reparation_effectuee=VALUES(reparation_effectuee), etat=VALUES(etat), id_reparateur=VALUES(id_reparateur), tarif=VALUES(tarif), date=VALUES(date), qr_code=VALUES(qr_code)";
+            String query = "INSERT INTO reparation (numero_reparation, id_client, details, reparation_effectuee, etat, id_reparateur, tarif, date) VALUES (?, ?, ?, ?, ?, ?, ?, ?) " +
+                    "ON DUPLICATE KEY UPDATE details=VALUES(details), reparation_effectuee=VALUES(reparation_effectuee), etat=VALUES(etat), id_reparateur=VALUES(id_reparateur), tarif=VALUES(tarif), date=VALUES(date)";
             PreparedStatement preparedStatement = gestionBDD.getConnection().prepareStatement(query);
             preparedStatement.setString(1, getReference);
             preparedStatement.setInt(2, getClientId());
@@ -176,7 +170,6 @@ public class AddReparationController implements Initializable {
             }
 
             preparedStatement.setDate(8, new java.sql.Date(System.currentTimeMillis()));
-            preparedStatement.setBytes(9, qrCodeBytes);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -261,7 +254,6 @@ public class AddReparationController implements Initializable {
         logoImageView.setFitWidth(100);
         logoImageView.setPreserveRatio(true);
         vbox.getChildren().add(logoImageView);
-
         Label titleLabel = new Label("NV Informatique");
         titleLabel.setStyle("-fx-font-size: 20px; -fx-font-weight: bold;");
         vbox.getChildren().add(titleLabel);
@@ -296,7 +288,7 @@ public class AddReparationController implements Initializable {
 
         // Générer et ajouter le QR code
         byte[] qrCodeBytes = qrCodeGenerator.generateQRCode(refReparation.getText());
-        BufferedImage bufferedImage = ImageIO.read(new java.io.ByteArrayInputStream(qrCodeBytes));
+        BufferedImage bufferedImage = ImageIO.read(new ByteArrayInputStream(qrCodeBytes));
         WritableImage qrCodeWritableImage = SwingFXUtils.toFXImage(bufferedImage, null);
         ImageView qrCodeImageView = new ImageView(qrCodeWritableImage);
         qrCodeImageView.setFitWidth(100);
@@ -305,7 +297,6 @@ public class AddReparationController implements Initializable {
 
         return vbox;
     }
-
 
     public void setClient(String nom, String prenom, String tel, String email, String societe, int id) {
         nomClient = nom;

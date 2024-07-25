@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.net.URL?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Menu?>
@@ -12,20 +13,23 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="634.0" prefWidth="858.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.nathanvernet.gestion_reparation.Controllers.HomeController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="634.0" prefWidth="994.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.nathanvernet.gestion_reparation.Controllers.HomeController">
+    <stylesheets>
+        <URL value="@/style.css" />
+    </stylesheets>
     <top>
-        <MenuBar BorderPane.alignment="CENTER">
+        <MenuBar fx:id="menuBar" styleClass="menu-bar" BorderPane.alignment="CENTER">
             <menus>
-                <Menu mnemonicParsing="false" text="Fichier">
+                <Menu mnemonicParsing="false" styleClass="menu" text="Fichier">
                     <items>
-                        <MenuItem fx:id="fichier_nouvelle_reparation" mnemonicParsing="false" text="Nouvelle réparation" />
-                        <MenuItem fx:id="fichier_nouveau_client" mnemonicParsing="false" text="Nouveau client" />
-                        <MenuItem fx:id="close" mnemonicParsing="false" text="Fermer" />
+                        <MenuItem fx:id="fichier_nouvelle_reparation" mnemonicParsing="false" style="color: black;" styleClass="menu-item" text="Nouvelle réparation" />
+                        <MenuItem fx:id="fichier_nouveau_client" mnemonicParsing="false" styleClass="menu-item" text="Nouveau client" />
+                        <MenuItem fx:id="close" mnemonicParsing="false" styleClass="menu-item" text="Fermer" />
                     </items>
                 </Menu>
-                <Menu mnemonicParsing="false" text="Admin">
+                <Menu mnemonicParsing="false" style="color: black;" styleClass="menu" text="Admin">
                     <items>
-                        <MenuItem fx:id="paneau_Admin" mnemonicParsing="false" text="Panneau d'administration" />
+                        <MenuItem fx:id="paneau_Admin" mnemonicParsing="false" styleClass="menu-item" text="Panneau d'administration" />
                     </items>
                 </Menu>
             </menus>
@@ -34,9 +38,8 @@
     <left>
         <VBox alignment="CENTER" prefHeight="607.0" prefWidth="286.0" spacing="30.0" BorderPane.alignment="CENTER">
             <children>
-                <Button mnemonicParsing="false" text="Liste des Réparations" />
-                <Button fx:id="pageListeClients" mnemonicParsing="false" text="Liste des clients" />
-            </children>
+                <Button mnemonicParsing="false" styleClass="button" text="Liste des Réparations" />
+                <Button fx:id="pageListeClients" mnemonicParsing="false" styleClass="button" text="Liste des clients" />            </children>
         </VBox>
     </left>
     <center>
@@ -44,12 +47,12 @@
             <children>
                 <HBox prefHeight="31.0" prefWidth="572.0" spacing="30.0">
                     <children>
-                  <Button fx:id="nouveauClient" mnemonicParsing="false" text="Nouveau Client" />
-                        <Button fx:id="nouvelleReparation" mnemonicParsing="false" text="Nouvelle réparation" />
-                        <HBox prefHeight="26.0" prefWidth="293.0" spacing="10.0">
+                        <Button fx:id="nouveauClient" mnemonicParsing="false" styleClass="button" text="Nouveau Client" />
+                        <Button fx:id="nouvelleReparation" mnemonicParsing="false" styleClass="button" text="Nouvelle réparation" />
+                        <HBox prefHeight="26.0" prefWidth="368.0" spacing="10.0">
                             <children>
-                                <TextField fx:id="textFieldRechercheReparation" promptText="Client / N° de réparation" />
-                                <Button fx:id="rechercheReparation" mnemonicParsing="false" prefHeight="26.0" prefWidth="147.0" text="Recherche réparation" />
+                                <TextField fx:id="textFieldRechercheReparation" prefHeight="40.0" prefWidth="146.0" promptText="Client / N° de réparation" styleClass="text-field search-field" />
+                                <Button fx:id="rechercheReparation" mnemonicParsing="false" prefHeight="26.0" prefWidth="190.0" styleClass="button" text="Recherche réparation" />
                             </children>
                         </HBox>
                     </children>
@@ -57,7 +60,7 @@
                         <Insets bottom="10.0" left="10.0" top="10.0" />
                     </VBox.margin>
                 </HBox>
-                <TableView fx:id="tableViewReparations" prefHeight="669.0" prefWidth="572.0">
+                <TableView fx:id="tableViewReparations" prefHeight="669.0" prefWidth="572.0" styleClass="table-view">
                     <columns>
                         <TableColumn fx:id="colDate" text="Date" />
                         <TableColumn fx:id="colNumeroReparation" text="Numéro Réparation" />
@@ -70,9 +73,9 @@
                         <TableColumn fx:id="colTarif" text="Tarif" />
                     </columns>
                 </TableView>
-                <VBox alignment="TOP_RIGHT" prefHeight="200.0" prefWidth="100.0">
+                <VBox alignment="TOP_RIGHT" prefHeight="18.0" prefWidth="703.0">
                     <children>
-                        <Button fx:id="boutonActualiser" mnemonicParsing="false" text="Actualiser" />
+                        <Button fx:id="boutonActualiser" mnemonicParsing="false" styleClass="button" text="Actualiser" />
                     </children>
                     <VBox.margin>
                         <Insets right="5.0" top="5.0" />

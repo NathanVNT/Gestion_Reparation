@@ -14,8 +14,8 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.nathanvernet.gestion_reparation.Application;
 import org.nathanvernet.gestion_reparation.BDD.GestionBDD;
-import org.nathanvernet.gestion_reparation.Modele.ModeleReparation;
 import org.nathanvernet.gestion_reparation.QRCodeGenerator;
+import org.nathanvernet.gestion_reparation.Modele.ModeleReparation;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -26,6 +26,7 @@ import java.net.URL;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
@@ -133,26 +134,31 @@ public class UpdateReparationController implements Initializable {
 
     private void saveUpdateToDatabase() {
         try {
-            String query = "UPDATE reparation SET details = ?, reparation_effectuee = ?, etat = ?, id_reparateur = ?, tarif = ?, date = ? WHERE numero_reparation = ?";
+            String query = "UPDATE reparation SET id_client = ?, details = ?, reparation_effectuee = ?, etat = ?, id_reparateur = ?, tarif = ?, date = ? WHERE numero_reparation = ?";
             PreparedStatement preparedStatement = gestionBDD.getConnection().prepareStatement(query);
-            preparedStatement.setString(1, detailsPanne.getText());
-            preparedStatement.setString(2, reparationEffectuee.getText());
-            preparedStatement.setString(3, choiceBoxEtat.getValue());
-            preparedStatement.setInt(4, getReparateurId());
+            preparedStatement.setInt(1, getClientId());
+            preparedStatement.setString(2, detailsPanne.getText());
+            preparedStatement.setString(3, reparationEffectuee.getText());
+            preparedStatement.setString(4, choiceBoxEtat.getValue());
+            preparedStatement.setInt(5, getReparateurId());
 
             // Handle optional tarif
             if (tarif.getText().isEmpty()) {
-                preparedStatement.setNull(5, java.sql.Types.DECIMAL);
+                preparedStatement.setNull(6, java.sql.Types.DECIMAL);
             } else {
-                preparedStatement.setBigDecimal(5, new BigDecimal(tarif.getText()));
+                preparedStatement.setBigDecimal(6, new BigDecimal(tarif.getText()));
             }
 
-            preparedStatement.setDate(6, new java.sql.Date(System.currentTimeMillis()));
-            preparedStatement.setString(7, refReparation.getText());
+            preparedStatement.setDate(7, new java.sql.Date(System.currentTimeMillis()));
+            preparedStatement.setString(8, refReparation.getText());
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    private int getClientId() {
+        return idClient;
     }
 
     private int getReparateurId() {
@@ -177,12 +183,12 @@ public class UpdateReparationController implements Initializable {
         stage.close();
     }
 
-    private void remplirChoiceBoxReparateur(java.util.List<String> choix) {
+    private void remplirChoiceBoxReparateur(List<String> choix) {
         choiceBoxReparateur.getItems().clear();
         choiceBoxReparateur.getItems().addAll(choix);
     }
 
-    private java.util.List<String> recupReparateur() throws SQLException {
+    private List<String> recupReparateur() throws SQLException {
         return gestionBDD.RecupReparateur();
     }
 

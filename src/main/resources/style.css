@@ -1,0 +1,67 @@
+/* Style pour la barre de menu */
+.menu-bar {
+    -fx-background-color: #336699;
+    -fx-text-fill: white;
+}
+
+.menu-bar .menu {
+    -fx-background-color: transparent;
+    -fx-text-fill: white;
+}
+
+.menu-bar .menu .menu-item {
+    -fx-background-color: transparent;
+    -fx-text-fill: white;
+}
+
+/* Style pour les boutons */
+.button {
+    -fx-background-color: #3498db;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-padding: 10px 20px;
+    -fx-background-radius: 5px;
+}
+
+.button:hover {
+    -fx-background-color: #2980b9;
+}
+
+/* Style pour la table */
+.table-view {
+    -fx-border-color: #bdc3c7;
+    -fx-background-color: white;
+}
+
+.table-view .column-header-background {
+    -fx-background-color: #34495e;
+}
+
+.table-view .column-header, .table-view .column-header .label {
+    -fx-text-fill: black; /* Changer la couleur du texte des filtres du tableau en noir */
+    -fx-font-weight: bold;
+}
+
+.table-view .table-row-cell:filled:selected, .table-view .table-cell:filled:selected {
+    -fx-background-color: #3498db;
+}
+
+/* Style pour les champs de texte */
+.text-field {
+    -fx-border-color: #bdc3c7;
+    -fx-padding: 5px;
+    -fx-background-color: #ecf0f1;
+}
+
+/* Ajuster la hauteur du champ de recherche */
+.search-field {
+    -fx-pref-height: 26px; /* Ajuster cette valeur selon vos besoins */
+    -fx-border-color: #bdc3c7;
+    -fx-background-color: #ecf0f1;
+}
+
+/* Style pour les boîtes de dialogue */
+.dialog-pane {
+    -fx-background-color: white;
+    -fx-border-color: #bdc3c7;
+}
