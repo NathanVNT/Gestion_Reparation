@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.text.Font?>
+
+<?import java.net.URL?>
+<GridPane alignment="CENTER" hgap="10" vgap="10" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.nathanvernet.gestion_reparation.Controllers.UpdateClientController">
+    <stylesheets>
+        <URL value="@/style.css" />
+    </stylesheets>
+    <children>
+        <Label text="Modifier Client" GridPane.columnSpan="2" GridPane.rowIndex="0">
+            <font>
+                <Font size="20.0" />
+            </font>
+        </Label>
+        <Label text="Type:" GridPane.rowIndex="1" GridPane.columnIndex="0" />
+        <ChoiceBox fx:id="clientType" prefWidth="150.0" GridPane.rowIndex="1" GridPane.columnIndex="1" />
+        <Label text="Nom:" GridPane.rowIndex="2" GridPane.columnIndex="0" />
+        <TextField fx:id="clientNom" GridPane.rowIndex="2" GridPane.columnIndex="1" />
+        <Label text="Prénom:" GridPane.rowIndex="3" GridPane.columnIndex="0" />
+        <TextField fx:id="clientPrenom" GridPane.rowIndex="3" GridPane.columnIndex="1" />
+        <Label text="Téléphone:" GridPane.rowIndex="4" GridPane.columnIndex="0" />
+        <TextField fx:id="clientTel" GridPane.rowIndex="4" GridPane.columnIndex="1" />
+        <Label text="E-mail:" GridPane.rowIndex="5" GridPane.columnIndex="0" />
+        <TextField fx:id="clientEmail" GridPane.rowIndex="5" GridPane.columnIndex="1" />
+        <Label text="Adresse:" GridPane.rowIndex="6" GridPane.columnIndex="0" />
+        <TextField fx:id="clientAdresse" GridPane.rowIndex="6" GridPane.columnIndex="1" />
+        <Label text="Code Postal:" GridPane.rowIndex="7" GridPane.columnIndex="0" />
+        <TextField fx:id="clientCodePostal" GridPane.rowIndex="7" GridPane.columnIndex="1" />
+        <Label text="Ville:" GridPane.rowIndex="8" GridPane.columnIndex="0" />
+        <TextField fx:id="clientVille" GridPane.rowIndex="8" GridPane.columnIndex="1" />
+        <Label text="Société:" GridPane.rowIndex="9" GridPane.columnIndex="0" />
+        <TextField fx:id="clientSociete" GridPane.rowIndex="9" GridPane.columnIndex="1" />
+        <Label text="Commentaire:" GridPane.rowIndex="10" GridPane.columnIndex="0" />
+        <TextArea fx:id="clientCommentaire" GridPane.rowIndex="10" GridPane.columnIndex="1" />
+        <HBox spacing="10.0" alignment="CENTER" GridPane.rowIndex="11" GridPane.columnSpan="2">
+            <children>
+                <Button text="Enregistrer" onAction="#updateClient" />
+                <Button text="Annuler" onAction="#closeWindow" />
+            </children>
+        </HBox>
+    </children>
+    <padding>
+        <Insets top="10" right="10" bottom="10" left="10"/>
+    </padding>
+</GridPane>

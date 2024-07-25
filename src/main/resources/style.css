@@ -11,7 +11,6 @@
 
 .menu-bar .menu .menu-item {
     -fx-background-color: transparent;
-    -fx-text-fill: white;
 }
 
 /* Style pour les boutons */
@@ -22,6 +21,7 @@
     -fx-padding: 10px 20px;
     -fx-background-radius: 5px;
 }
+
 
 .button:hover {
     -fx-background-color: #2980b9;
@@ -64,4 +64,25 @@
 .dialog-pane {
     -fx-background-color: white;
     -fx-border-color: #bdc3c7;
+}
+
+/* Style pour les boutons */
+.button {
+    -fx-background-color: #3498db;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-padding: 10px 20px;
+    -fx-background-radius: 5px;
+}
+
+.button:hover {
+    -fx-background-color: #2980b9;
+}
+
+/* Style pour les champs de texte */
+.text-field {
+    -fx-border-color: #bdc3c7;
+    -fx-padding: 5px;
+    -fx-background-color: #ecf0f1;
+    -fx-border-radius: 5px;
 }

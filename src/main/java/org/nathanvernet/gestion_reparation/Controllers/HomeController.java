@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 public class HomeController implements Initializable {
+    public Button nouveauClient;
     @FXML
     private MenuItem close;
     @FXML
@@ -70,6 +71,13 @@ public class HomeController implements Initializable {
         nouvelleReparation.setOnAction(event -> {
             try {
                 openNouvelleReparation();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
+        nouveauClient.setOnAction(event -> {
+            try {
+                openAddClientPage();
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -136,7 +144,14 @@ public class HomeController implements Initializable {
             return row;
         });
     }
-
+    private void openAddClientPage() throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(Application.class.getResource("add-client.fxml"));
+        Parent root = fxmlLoader.load();
+        Stage stage = new Stage();
+        stage.setScene(new Scene(root));
+        stage.setTitle("Nouveau Client");
+        stage.show();
+    }
     private void loadReparations() throws SQLException {
         ArrayList<ModeleReparation> reparations = gestionBDD.getReparations();
         tableViewReparations.getItems().setAll(reparations);

@@ -35,27 +35,27 @@ public class GestionBDD {
     public ArrayList<ModeleClient> getClients() throws SQLException {
         ArrayList<ModeleClient> clients = new ArrayList<>();
         String query = "SELECT * FROM client";
-        PreparedStatement preparedStatement = connection.prepareStatement(query);
-        ResultSet resultSet = preparedStatement.executeQuery();
-
+        Statement statement = connection.createStatement();
+        ResultSet resultSet = statement.executeQuery(query);
         while (resultSet.next()) {
-            ModeleClient client = new ModeleClient(
-                    resultSet.getInt("id"),
-                    resultSet.getString("nom"),
-                    resultSet.getString("prenom"),
-                    resultSet.getString("code_postal"),
-                    resultSet.getString("adresse"),
-                    resultSet.getString("ville"),
-                    resultSet.getString("type"),
-                    resultSet.getString("societe"),
-                    resultSet.getString("commentaire"),
-                    resultSet.getString("telephone"),
-                    resultSet.getString("mail")
-            );
+            int id = resultSet.getInt("id");
+            String nom = resultSet.getString("nom");
+            String prenom = resultSet.getString("prenom");
+            String telephone = resultSet.getString("telephone");
+            String email = resultSet.getString("mail");
+            String adresse = resultSet.getString("adresse");
+            String codePostal = resultSet.getString("code_postal");
+            String ville = resultSet.getString("ville");
+            String type = resultSet.getString("type");
+            String societe = resultSet.getString("societe");
+            String commentaire = resultSet.getString("commentaire");
+
+            ModeleClient client = new ModeleClient(id, nom, prenom, codePostal, adresse, ville, type, societe, commentaire, telephone, email);
             clients.add(client);
         }
         return clients;
-    }    // Ajout de la méthode getReparations()
+    }
+
     public ArrayList<ModeleReparation> getReparations() throws SQLException {
         ConnexionBDD();
         ArrayList<ModeleReparation> reparations = new ArrayList<>();
@@ -110,5 +110,36 @@ public class GestionBDD {
             reparations.add(reparation);
         }
         return reparations;
+    }
+    public void addClient(ModeleClient client) throws SQLException {
+        String query = "INSERT INTO client(nom, prenom, telephone, mail, adresse, code_postal, ville, type, commentaire, societe) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        PreparedStatement preparedStatement = connection.prepareStatement(query);
+        preparedStatement.setString(1, client.getNom());
+        preparedStatement.setString(2, client.getPrenom());
+        preparedStatement.setString(3, client.getTelephone());
+        preparedStatement.setString(4, client.getEmail());
+        preparedStatement.setString(5, client.getAdresse());
+        preparedStatement.setString(6, client.getCodePostal());
+        preparedStatement.setString(7, client.getVille());
+        preparedStatement.setString(8, client.getType());
+        preparedStatement.setString(9, client.getCommentaire());
+        preparedStatement.setString(10, client.getSociete());
+        preparedStatement.executeUpdate();
+    }
+    public void updateClient(ModeleClient client) throws SQLException {
+        String query = "UPDATE client SET nom = ?, prenom = ?, telephone = ?, mail = ?, adresse = ?, code_postal = ?, ville = ?, type = ?, commentaire = ?, societe = ? WHERE id = ?";
+        PreparedStatement preparedStatement = connection.prepareStatement(query);
+        preparedStatement.setString(1, client.getNom());
+        preparedStatement.setString(2, client.getPrenom());
+        preparedStatement.setString(3, client.getTelephone());
+        preparedStatement.setString(4, client.getEmail());
+        preparedStatement.setString(5, client.getAdresse());
+        preparedStatement.setString(6, client.getCodePostal());
+        preparedStatement.setString(7, client.getVille());
+        preparedStatement.setString(8, client.getType());
+        preparedStatement.setString(9, client.getCommentaire());
+        preparedStatement.setString(10, client.getSociete());
+        preparedStatement.setInt(11, client.getId());
+        preparedStatement.executeUpdate();
     }
 }

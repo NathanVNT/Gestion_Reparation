@@ -27,47 +27,28 @@ public class ModeleClient {
         this.email = email;
     }
 
-    public int getId() {
-        return id;
-    }
+    // Getters
+    public int getId() { return id; }
+    public String getNom() { return nom; }
+    public String getPrenom() { return prenom; }
+    public String getCodePostal() { return codePostal; }
+    public String getAdresse() { return adresse; }
+    public String getVille() { return ville; }
+    public String getType() { return type; }
+    public String getSociete() { return societe; }
+    public String getCommentaire() { return commentaire; }
+    public String getTelephone() { return telephone; }
+    public String getEmail() { return email; }
 
-    public String getNom() {
-        return nom;
-    }
-
-    public String getPrenom() {
-        return prenom;
-    }
-
-    public String getCodePostal() {
-        return codePostal;
-    }
-
-    public String getAdresse() {
-        return adresse;
-    }
-
-    public String getVille() {
-        return ville;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public String getSociete() {
-        return societe;
-    }
-
-    public String getCommentaire() {
-        return commentaire;
-    }
-
-    public String getTelephone() {
-        return telephone;
-    }
-
-    public String getEmail() {
-        return email;
-    }
+    // Setters
+    public void setNom(String nom) { this.nom = nom; }
+    public void setPrenom(String prenom) { this.prenom = prenom; }
+    public void setCodePostal(String codePostal) { this.codePostal = codePostal; }
+    public void setAdresse(String adresse) { this.adresse = adresse; }
+    public void setVille(String ville) { this.ville = ville; }
+    public void setType(String type) { this.type = type; }
+    public void setSociete(String societe) { this.societe = societe; }
+    public void setCommentaire(String commentaire) { this.commentaire = commentaire; }
+    public void setTelephone(String telephone) { this.telephone = telephone; }
+    public void setEmail(String email) { this.email = email; }
 }
