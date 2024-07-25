@@ -154,9 +154,8 @@ public class ClientsController implements Initializable {
     private void openListeReparations() throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(Application.class.getResource("home-page.fxml"));
         Parent root = fxmlLoader.load();
-        Stage stage = (Stage) listeReparationsPage.getScene().getWindow();
-        stage.setScene(new Scene(root));
-        stage.setMaximized(true);
+        Scene scene = nouveauClient.getScene();
+        scene.setRoot(root);
     }
 
     private void showAlert(String title, String content, Alert.AlertType type) {

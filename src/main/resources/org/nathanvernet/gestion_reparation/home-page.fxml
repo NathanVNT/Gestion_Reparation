@@ -73,7 +73,7 @@
                         <TableColumn fx:id="colTarif" text="Tarif" />
                     </columns>
                 </TableView>
-                <VBox alignment="TOP_RIGHT" prefHeight="18.0" prefWidth="703.0">
+                <VBox alignment="TOP_RIGHT" prefHeight="189.0" prefWidth="703.0">
                     <children>
                         <Button fx:id="boutonActualiser" mnemonicParsing="false" styleClass="button" text="Actualiser" />
                     </children>
