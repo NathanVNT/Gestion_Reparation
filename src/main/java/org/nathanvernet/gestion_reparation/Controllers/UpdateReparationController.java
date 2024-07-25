@@ -23,14 +23,17 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.net.URL;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class UpdateReparationController implements Initializable {
+    public DatePicker dateReparation;
     @FXML
     private ChoiceBox<String> choiceBoxReparateur;
     @FXML
@@ -61,6 +64,7 @@ public class UpdateReparationController implements Initializable {
     private TextField tarif;
 
     private static String nomClient;
+    private static Date date;
     private static String prenomClient;
     private static String telClient;
     private static String emailClient;
@@ -69,7 +73,8 @@ public class UpdateReparationController implements Initializable {
     @FXML
     private Button selectClient;
     private QRCodeGenerator qrCodeGenerator = new QRCodeGenerator();
-
+    SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+    private String dateFormat;
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         try {
@@ -194,7 +199,9 @@ public class UpdateReparationController implements Initializable {
 
     public void setReparation(ModeleReparation reparation) {
         refReparation.setText(reparation.getNumeroReparation());
-
+        date = reparation.getDate();
+        dateReparation.setValue(date.toLocalDate());
+        dateFormat = format.format(date);
         nomClient = reparation.getNomClient();
         prenomClient = reparation.getPrenomClient();
         telClient = reparation.getTelClient();
@@ -228,7 +235,6 @@ public class UpdateReparationController implements Initializable {
         emailClient = email;
         societeClient = societe;
         idClient = id;
-
         clientNom.setText(nomClient);
         clientPrenom.setText(prenomClient);
         clientTel.setText(telClient);
@@ -273,7 +279,7 @@ public class UpdateReparationController implements Initializable {
         clientLabel.setStyle("-fx-font-weight: bold;");
         vbox.getChildren().add(clientLabel);
 
-        Label clientDetails = new Label("Nom: " + nomClient + "\nPrénom: " + prenomClient + "\nTel: " + telClient + "\nE-Mail: " + emailClient + "\nSociété: " + societeClient);
+        Label clientDetails = new Label("Le: " + dateFormat+"\nNom: " + nomClient + "\nPrénom: " + prenomClient + "\nTel: " + telClient + "\nE-Mail: " + emailClient + "\nSociété: " + societeClient);
         vbox.getChildren().add(clientDetails);
 
         Label panneLabel = new Label("Détail de la panne: ");

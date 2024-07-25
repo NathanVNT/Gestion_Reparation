@@ -14,12 +14,12 @@ public class GestionBDD {
     private ResultSet resultSet;
 
     public void ConnexionBDD() throws SQLException {
-        connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/GestionReparation", "root", "root"); //TODO Ajout de la config via le config.json
+        connection = DriverManager.getConnection("jdbc:mysql://***REMOVED***", "***REMOVED***", "***REMOVED***"); //TODO Ajout de la config via le config.json
         statement = connection.createStatement();
     }
 
     public Connection getConnection() throws SQLException {
-        return DriverManager.getConnection("jdbc:mysql://localhost:3306/GestionReparation", "root", "root");
+        return DriverManager.getConnection("jdbc:mysql://***REMOVED***", "***REMOVED***", "***REMOVED***");
     }
 
     public ArrayList<String> RecupReparateur() throws SQLException {
