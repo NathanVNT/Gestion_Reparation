@@ -75,6 +75,10 @@ public class UpdateReparationController implements Initializable {
     private QRCodeGenerator qrCodeGenerator = new QRCodeGenerator();
     SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
     private String dateFormat;
+
+    public UpdateReparationController() throws IOException {
+    }
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         try {
@@ -139,7 +143,7 @@ public class UpdateReparationController implements Initializable {
 
     private void saveUpdateToDatabase() {
         try {
-            String query = "UPDATE reparation SET id_client = ?, details = ?, reparation_effectuee = ?, etat = ?, id_reparateur = ?, tarif = ?, date = ? WHERE numero_reparation = ?";
+            String query = "UPDATE reparation SET id_client = ?, details = ?, reparation_effectuee = ?, etat = ?, id_reparateur = ?, tarif = ? WHERE numero_reparation = ?";
             PreparedStatement preparedStatement = gestionBDD.getConnection().prepareStatement(query);
             preparedStatement.setInt(1, getClientId());
             preparedStatement.setString(2, detailsPanne.getText());
@@ -154,8 +158,7 @@ public class UpdateReparationController implements Initializable {
                 preparedStatement.setBigDecimal(6, new BigDecimal(tarif.getText()));
             }
 
-            preparedStatement.setDate(7, new java.sql.Date(System.currentTimeMillis()));
-            preparedStatement.setString(8, refReparation.getText());
+            preparedStatement.setString(7, refReparation.getText());
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();

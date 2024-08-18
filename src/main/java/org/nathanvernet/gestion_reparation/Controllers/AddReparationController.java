@@ -83,6 +83,9 @@ public class AddReparationController implements Initializable {
     private QRCodeGenerator qrCodeGenerator = new QRCodeGenerator();
     private byte[] qrCodeBytes;
 
+    public AddReparationController() throws IOException {
+    }
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         getReference = generateReference();
