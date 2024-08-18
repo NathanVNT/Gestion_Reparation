@@ -66,6 +66,9 @@ public class HomeController implements Initializable {
     private Scene currentScene;
     private GestionBDD gestionBDD = new GestionBDD();
 
+    public HomeController() throws IOException {
+    }
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         close.setOnAction(event -> System.exit(0));

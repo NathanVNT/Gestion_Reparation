@@ -11,7 +11,15 @@ import java.io.IOException;
 import java.sql.SQLException;
 
 public class Application extends javafx.application.Application {
-    public static GestionBDD gestionBDD = new GestionBDD();
+    public static GestionBDD gestionBDD;
+
+    static {
+        try {
+            gestionBDD = new GestionBDD();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     @Override
     public void start(Stage stage) throws IOException {

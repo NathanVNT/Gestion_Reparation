@@ -3,25 +3,41 @@ package org.nathanvernet.gestion_reparation.BDD;
 import org.nathanvernet.gestion_reparation.Modele.ModeleClient;
 import org.nathanvernet.gestion_reparation.Modele.ModeleReparation;
 
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Properties;
 
 public class GestionBDD {
 
     private Connection connection;
     private Statement statement;
     private ResultSet resultSet;
+    private Properties properties;
+
+    public GestionBDD() throws IOException {
+        properties = new Properties();
+        try (FileInputStream input = new FileInputStream("config.properties")) {
+            properties.load(input);
+        }
+    }
 
     public void ConnexionBDD() throws SQLException {
-        connection = DriverManager.getConnection("jdbc:mysql://***REMOVED***", "***REMOVED***", "***REMOVED***"); //TODO Ajout de la config via le config.json
+        String url = properties.getProperty("db.url");
+        String username = properties.getProperty("db.username");
+        String password = properties.getProperty("db.password");
+        connection = DriverManager.getConnection(url, username, password);
         statement = connection.createStatement();
     }
 
     public Connection getConnection() throws SQLException {
-        return DriverManager.getConnection("jdbc:mysql://***REMOVED***", "***REMOVED***", "***REMOVED***");
+        String url = properties.getProperty("db.url");
+        String username = properties.getProperty("db.username");
+        String password = properties.getProperty("db.password");
+        return DriverManager.getConnection(url, username, password);
     }
-
     public ArrayList<String> RecupReparateur() throws SQLException {
         ConnexionBDD();
         ArrayList<String> reparateur = new ArrayList<>();
