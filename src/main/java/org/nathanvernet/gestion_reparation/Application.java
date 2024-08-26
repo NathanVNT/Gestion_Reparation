@@ -30,24 +30,19 @@ public class Application extends javafx.application.Application {
         stage.setScene(scene);
 
         // Set the application icon
-        stage.getIcons().add(new Image(getClass().getResourceAsStream("/logo.png"))); // Set the application icon
+        stage.getIcons().add(new Image(getClass().getResourceAsStream("/logo.png")));
         // Maximize the window
         stage.setMaximized(true);
 
         stage.show();
-        getBDD();
+        getBDD(stage);
     }
 
-    private void getBDD() {
+    private void getBDD(Stage primaryStage) {
         try {
             gestionBDD.ConnexionBDD();
         } catch (SQLException e) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Erreur de connexion");
-            alert.setHeaderText("Erreur de connexion");
-            alert.setContentText("Erreur de connexion à la base de données veuillez vérifier la configuration de l'application.");
-            alert.showAndWait();
-            System.exit(0);
+            BDDConfigurationWindow.showConfigurationWindow(primaryStage, gestionBDD);
         }
     }
 
