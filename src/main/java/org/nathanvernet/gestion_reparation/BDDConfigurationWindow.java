@@ -11,7 +11,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import org.nathanvernet.gestion_reparation.Application;
 import org.nathanvernet.gestion_reparation.BDD.GestionBDD;
 
 import java.io.FileWriter;
@@ -38,38 +37,46 @@ public class BDDConfigurationWindow {
         grid.add(ipLabel, 0, 0);
         grid.add(ipField, 1, 0);
 
+        // Champ pour le port de la base de données
+        Label portLabel = new Label("Port de la BDD :");
+        TextField portField = new TextField();
+        portField.setPromptText("3306");
+        grid.add(portLabel, 0, 1);
+        grid.add(portField, 1, 1);
+
         // Champ pour le nom de la base de données
         Label dbNameLabel = new Label("Nom de la BDD :");
         TextField dbNameField = new TextField();
         dbNameField.setPromptText("votre_bdd");
-        grid.add(dbNameLabel, 0, 1);
-        grid.add(dbNameField, 1, 1);
+        grid.add(dbNameLabel, 0, 2);
+        grid.add(dbNameField, 1, 2);
 
         // Champ pour le nom d'utilisateur
         Label usernameLabel = new Label("Nom d'utilisateur :");
         TextField usernameField = new TextField();
         usernameField.setPromptText("root");
-        grid.add(usernameLabel, 0, 2);
-        grid.add(usernameField, 1, 2);
+        grid.add(usernameLabel, 0, 3);
+        grid.add(usernameField, 1, 3);
 
         // Champ pour le mot de passe
         Label passwordLabel = new Label("Mot de passe :");
         PasswordField passwordField = new PasswordField();
         passwordField.setPromptText("mot de passe");
-        grid.add(passwordLabel, 0, 3);
-        grid.add(passwordField, 1, 3);
+        grid.add(passwordLabel, 0, 4);
+        grid.add(passwordField, 1, 4);
 
         // Bouton pour sauvegarder la configuration
         Button saveButton = new Button("Sauvegarder et Connecter");
-        grid.add(saveButton, 1, 4);
+        grid.add(saveButton, 1, 5);
 
         saveButton.setOnAction(event -> {
             String ip = ipField.getText();
+            String port = portField.getText();
             String dbName = dbNameField.getText();
             String username = usernameField.getText();
             String password = passwordField.getText();
 
-            if (ip.isEmpty() || dbName.isEmpty() || username.isEmpty() || password.isEmpty()) {
+            if (ip.isEmpty() || port.isEmpty() || dbName.isEmpty() || username.isEmpty() || password.isEmpty()) {
                 Alert alert = new Alert(Alert.AlertType.WARNING);
                 alert.setTitle("Champs Manquants");
                 alert.setHeaderText("Tous les champs doivent être remplis");
@@ -78,7 +85,7 @@ public class BDDConfigurationWindow {
             } else {
                 try {
                     // Construire l'URL de la base de données
-                    String url = "jdbc:mysql://" + ip + ":3306/" + dbName;
+                    String url = "jdbc:mysql://" + ip + ":" + port + "/" + dbName;
 
                     // Mise à jour du fichier config.properties
                     gestionBDD.getProperties().setProperty("db.url", url);

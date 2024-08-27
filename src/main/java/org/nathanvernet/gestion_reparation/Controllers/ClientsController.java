@@ -11,24 +11,27 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import org.nathanvernet.gestion_reparation.Application;
+import org.nathanvernet.gestion_reparation.BDDConfigurationWindow;
 import org.nathanvernet.gestion_reparation.Modele.ModeleClient;
 import org.nathanvernet.gestion_reparation.Modele.ModeleReparation;
 
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.ResourceBundle;
 
-import static org.nathanvernet.gestion_reparation.Application.gestionBDD;
-
 public class ClientsController implements Initializable {
-    public Button nouveauClient;
-    public MenuItem fichier_nouvelle_reparation;
-    public MenuItem fichier_nouveau_client;
-    public MenuItem close;
+    @FXML
+    private Button nouveauClient;
+    @FXML
+    private MenuItem fichier_nouvelle_reparation;
+    @FXML
+    private MenuItem fichier_nouveau_client;
+    @FXML
+    private MenuItem close;
+    @FXML
+    private MenuItem conf_bdd;
     @FXML
     private TableView<ModeleClient> tableViewClients;
     @FXML
@@ -77,9 +80,12 @@ public class ClientsController implements Initializable {
         colSociete.setCellValueFactory(new PropertyValueFactory<>("societe"));
 
         loadClients();
-        close.setOnAction(event -> {
-            System.exit(0);
-        });
+        setupEventHandlers();
+    }
+
+    private void setupEventHandlers() {
+        close.setOnAction(event -> System.exit(0));
+        conf_bdd.setOnAction(event -> showBDDConfigurationWindow());
         fichier_nouvelle_reparation.setOnAction(event -> {
             try {
                 openNouvelleReparation();
@@ -88,6 +94,22 @@ public class ClientsController implements Initializable {
             }
         });
         fichier_nouveau_client.setOnAction(event -> {
+            try {
+                openAddClientPage();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
+        boutonActualiser.setOnAction(event -> loadClients());
+        rechercheClient.setOnAction(event -> searchClients());
+        listeReparationsPage.setOnAction(event -> {
+            try {
+                openListeReparations();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+        nouveauClient.setOnAction(event -> {
             try {
                 openAddClientPage();
             } catch (IOException e) {
@@ -104,28 +126,13 @@ public class ClientsController implements Initializable {
                 }
             }
         });
-
-
-        boutonActualiser.setOnAction(event -> loadClients());
-
-        rechercheClient.setOnAction(event -> searchClients());
-
-        listeReparationsPage.setOnAction(event -> {
-            try {
-                openListeReparations();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        });
-        nouveauClient.setOnAction(event -> {
-            try {
-                openAddClientPage();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-
-        });
     }
+
+    private void showBDDConfigurationWindow() {
+        Stage primaryStage = (Stage) conf_bdd.getParentPopup().getOwnerWindow();
+        BDDConfigurationWindow.showConfigurationWindow(primaryStage, Application.gestionBDD);
+    }
+
     private void openAddClientPage() throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(Application.class.getResource("add-client.fxml"));
         Parent root = fxmlLoader.load();
@@ -134,9 +141,10 @@ public class ClientsController implements Initializable {
         stage.setTitle("Nouveau Client");
         stage.show();
     }
+
     private void loadClients() {
         try {
-            clientList = FXCollections.observableArrayList(gestionBDD.getClients());
+            clientList = FXCollections.observableArrayList(Application.gestionBDD.getClients());
             filteredClientList = new FilteredList<>(clientList, p -> true);
             tableViewClients.setItems(filteredClientList);
         } catch (SQLException e) {
@@ -188,6 +196,7 @@ public class ClientsController implements Initializable {
         alert.setContentText(content);
         alert.showAndWait();
     }
+
     private void openNouvelleReparation() throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(Application.class.getResource("add-reparation.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
@@ -196,6 +205,4 @@ public class ClientsController implements Initializable {
         stage.setTitle("Nouvelle Reparation");
         stage.show();
     }
-
-
 }

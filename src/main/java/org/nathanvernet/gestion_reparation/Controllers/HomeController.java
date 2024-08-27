@@ -10,6 +10,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import org.nathanvernet.gestion_reparation.Application;
 import org.nathanvernet.gestion_reparation.BDD.GestionBDD;
+import org.nathanvernet.gestion_reparation.BDDConfigurationWindow;
 import org.nathanvernet.gestion_reparation.Modele.ModeleReparation;
 
 import java.io.IOException;
@@ -24,6 +25,7 @@ import java.util.ResourceBundle;
 
 public class HomeController implements Initializable {
     public Button nouveauClient;
+    public MenuItem configBDD;
     @FXML
     private MenuItem close;
     @FXML
@@ -85,6 +87,9 @@ public class HomeController implements Initializable {
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
+        });
+        configBDD.setOnAction(event -> {
+            BDDConfigurationWindow.showConfigurationWindow((Stage) configBDD.getParentPopup().getOwnerWindow(), gestionBDD);
         });
         nouveauClient.setOnAction(event -> {
             try {

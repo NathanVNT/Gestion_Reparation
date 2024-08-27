@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="634.0" prefWidth="994.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.nathanvernet.gestion_reparation.Controllers.HomeController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="634.0" prefWidth="994.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.nathanvernet.gestion_reparation.Controllers.HomeController">
     <stylesheets>
         <URL value="@/style.css" />
     </stylesheets>
@@ -29,7 +29,7 @@
                 </Menu>
                 <Menu mnemonicParsing="false" style="color: black;" styleClass="menu" text="Admin">
                     <items>
-                        <MenuItem fx:id="paneau_Admin" mnemonicParsing="false" styleClass="menu-item" text="Panneau d'administration" />
+                        <MenuItem fx:id="configBDD" mnemonicParsing="false" styleClass="menu-item" text="Configuration BDD" />
                     </items>
                 </Menu>
             </menus>

@@ -29,7 +29,7 @@
                 </Menu>
                 <Menu mnemonicParsing="false" text="Admin">
                     <items>
-                        <MenuItem fx:id="paneau_Admin" mnemonicParsing="false" text="Panneau d'administration" />
+                        <MenuItem fx:id="conf_bdd" mnemonicParsing="false" text="Configuration BDD" />
                     </items>
                 </Menu>
             </menus>
